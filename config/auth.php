@@ -90,6 +90,17 @@ return [
     |
     */
 
+    'middleware' => [
+        'web' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            // Add the new middleware to the stack
+            'role' => \App\Http\Middleware\CheckRole::class,
+        ],
+    ],
+
+
     'passwords' => [
         'users' => [
             'provider' => 'users',
