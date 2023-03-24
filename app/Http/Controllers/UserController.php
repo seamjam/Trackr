@@ -15,11 +15,6 @@ class UserController extends Controller
         $this->middleware(['role:superadmin', 'role:webshop']);
     }
 
-    public function index()
-    {
-        return view('superadmin.index');
-    }
-
     public function usersShow(Request $request)
     {
         $query = User::whereDoesntHave('roles', function ($query) {

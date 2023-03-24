@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use \App\Http\Controllers\WebshopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,12 +32,22 @@ Route::middleware('auth')->group(function () {
 
 //superadmin
 Route::get('/superadmin', [UserController::class, 'index'])->name('superadmin.index');
+
+//user
 Route::get('/users', [UserController::class, 'usersShow'])->name('user.show');
-Route::get('/users/create', [UserController::class, 'create'])->name('user.create');
-Route::post('/users/create', [UserController::class, 'store'])->name('user.store');
-Route::post('/users/delete', [UserController::class, 'destroy'])->name('user.delete');
-Route::get('/users/{user}', [UserController::class, 'edit'])->name('user.edit');
-Route::put('/users/{user}', [UserController::class, 'update'])->name('user.update');
+Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+Route::post('/user/create', [UserController::class, 'store'])->name('user.store');
+Route::post('/user/delete', [UserController::class, 'destroy'])->name('user.delete');
+Route::get('/user/{user}', [UserController::class, 'edit'])->name('user.edit');
+Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
+
+//superadmin
+//webshop
+Route::get('/webshops', [WebshopController::class, 'webshopsShow'])->name('webshop.show');
+Route::get('/webshop/create', [WebshopController::class, 'create'])->name('webshop.create');
+
+
+
 
 
 require __DIR__.'/auth.php';
