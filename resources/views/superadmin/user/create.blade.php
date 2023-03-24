@@ -4,7 +4,7 @@
     <div class="bg-white p-4 rounded-lg" style="max-width: 950px; margin: 50px auto 0;">
         <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">create Trackr user</h1>
 
-        <form method="POST" action="{{ route('users.store') }}">
+        <form method="POST" action="{{ route('user.store') }}">
             @csrf
 
             <x-form-input name="name"/>
@@ -28,7 +28,7 @@
                     Add User
                 </button>
 
-                <button type="button" onclick="window.location.href='{{ route('superadmin.users_show') }}'"
+                <button type="button" onclick="window.location.href='{{ route('user.show') }}'"
                         class="bg-white border border-black text-black font-bold py-2 px-5 rounded-lg">
                     Return
                 </button>

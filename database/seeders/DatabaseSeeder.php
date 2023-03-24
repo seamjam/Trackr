@@ -3,8 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Package;
+use App\Models\Post_company;
+use App\Models\Review;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Webshop;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +19,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        //webshops
+        Webshop::Create([
+            'name' => 'Webshop 1',
+            'postcode' => '3459AA',
+            'house_number' => '1',
+        ]);
+
         // superadmin user
         $superadmin = User::create([
             'name' => 'Superadmin',
@@ -27,7 +37,7 @@ class DatabaseSeeder extends Seeder
         //roles
         $roles = [
             ['name' => 'superadmin'],
-            ['name' => 'administrator'],
+            ['name' => 'webshop'],
             ['name' => 'packer'],
             ['name' => 'delivery_worker'],
             ['name' => 'delivery_company'],
@@ -51,32 +61,22 @@ class DatabaseSeeder extends Seeder
         ];
         DB::table('statuses')->insert($status);
 
-//        Package::create([
-//            'name' => 'packet1',
-//            'status_id' => '1',
-//            'postbedrijf_id',
-//            'track and trace_ nullable -> gerigstreerd dan wordt die track and trace aangemaakt',
-//            'webshop_id'
-//        ]);
-//
-//        WebShop::create([
-//            'name',
-//            'adres',
-//            'emailadres',
-//        ]);
-//
-//        ''
-//
-//        superadmin-> administrator ->shopnaam.
-//        administrator -> gebruikers-> packer-> amndere functies binnend de shop
-//    bepaald shop.
-//
-//    superadmin->
-//
-//    DeliveryCompany::create([
-//        'id',
-//        'name'
-//    ]);
+        $post_companies = [['name' => 'dhl'],
+            ['name' => 'post_nl'],
+            ['name' => 'ups'],
+        ];
+        Post_company::insert($post_companies);
+
+
+        $reviews = [['stars' => 5, 'description' => 'hele fijne delivery, zal het zeker nog eens doen. via deze post bedrijf hihi']
+        ];
+        DB::table('reviews')->insert($reviews);
+
+
+        $packages = [['name' => 'packet1', 'status_id' => '1', 'post_company_id' => '1', 'tracking_number' => '13789373', 'webshop_id' => '1', 'review_id' => '1',],
+        ];
+
+        DB::table('packages')->insert($packages);
 
     }
 }

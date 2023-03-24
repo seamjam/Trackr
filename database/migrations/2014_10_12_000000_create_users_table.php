@@ -11,6 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //webshop aanmaken
+        Schema::create('webshops', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('postcode');
+            $table->string('house_number');
+            $table->timestamps();
+        });
+
+
         //user table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -19,6 +29,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phonenumber')->nullable();
+            $table->unsignedBigInteger('webshop_id')->nullable();
+            $table->foreign('webshop_id')->references('id')->on('webshops');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -47,14 +59,37 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('post_companies', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        //Reviews
+        Schema::create('reviews', function (Blueprint $table) {
+            $table->id();
+            $table->integer('stars')->nullable();
+            $table->text('description');
+            $table->timestamps();
+        });
+
+
         //package
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('statuses');
+            $table->string('tracking_number')->nullable();
+            $table->unsignedBigInteger('webshop_id')->nullable();
+            $table->foreign('webshop_id')->references('id')->on('webshops')->nullabele();
+            $table->unsignedBigInteger('post_company_id')->nullable();
+            $table->foreign('post_company_id')->references('id')->on('post_companies')->nullabele();
+            $table->unsignedBigInteger('review_id')->nullable();
+            $table->foreign('review_id')->references('id')->on('reviews');
             $table->timestamps();
         });
+
 
         //reset password token table
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -74,6 +109,9 @@ return new class extends Migration
         Schema::dropIfExists('roles');
         Schema::dropIfExists('packages');
         Schema::dropIfExists('statuses');
+        Schema::dropIfExists('webshops');
+        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('post_companies');
     }
 };
 
