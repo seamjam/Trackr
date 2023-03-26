@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('phonenumber')->nullable();
             $table->unsignedBigInteger('webshop_id')->nullable();
             $table->foreign('webshop_id')->references('id')->on('webshops');
+            $table->boolean('is_admin');
             $table->rememberToken();
             $table->timestamps();
         });

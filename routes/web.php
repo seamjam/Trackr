@@ -37,7 +37,7 @@ Route::get('/superadmin', [UserController::class, 'index'])->name('superadmin.in
 Route::get('/users', [UserController::class, 'usersShow'])->name('user.show');
 Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
 Route::post('/user/create', [UserController::class, 'store'])->name('user.store');
-Route::post('/user/delete', [UserController::class, 'destroy'])->name('user.delete');
+Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 Route::get('/user/{user}', [UserController::class, 'edit'])->name('user.edit');
 Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
 
@@ -45,9 +45,9 @@ Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update
 //webshop
 Route::get('/webshops', [WebshopController::class, 'webshopsShow'])->name('webshop.show');
 Route::get('/webshop/create', [WebshopController::class, 'create'])->name('webshop.create');
-
-
-
+Route::get('/webshop/{user}', [WebshopController::class, 'edit'])->name('webshop.edit');
+Route::put('/webshop/{user}', [WebshopController::class, 'update'])->name('webshop.update');
+Route::post('/webshop/create', [WebshopController::class, 'store'])->name('webshop.store');
 
 
 require __DIR__.'/auth.php';

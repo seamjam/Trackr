@@ -18,7 +18,7 @@ class UserController extends Controller
     public function usersShow(Request $request)
     {
         $query = User::whereDoesntHave('roles', function ($query) {
-            $query->where('id', 1);
+            $query->whereIn('id', [1, 2]);
         });
 
         if ($request->has('search')) {
@@ -34,10 +34,9 @@ class UserController extends Controller
         return view('superadmin.user.show', ['users' => $users]);
     }
 
-
     public function create()
     {
-        $roles = Role::where('name', '!=', 'superadmin')->get();
+        $roles = Role::where('name', '!=', 'superadmin')->where('name', '!=', 'webshop')->get();
         return view('superadmin.user.create', ['roles' => $roles, 'selectedRoles' => []]);
     }
 
@@ -56,6 +55,7 @@ class UserController extends Controller
         $user->email = $validatedData['email'];
         $user->password = Hash::make('Welkom2023');
         $user->phonenumber = $validatedData['phonenumber'];
+        $user->is_admin = false;
         $user->save();
 
         $user->roles()->attach($validatedData['roles']);
@@ -65,7 +65,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $roles = Role::where('name', '!=', 'superadmin')->get();
+        $roles = Role::where('name', '!=', 'superadmin')->where('name', '!=', 'webshop')->get();
         $selectedRoles = $user->roles->pluck('id')->toArray();
         return view('superadmin.user.edit', ['user' => $user, 'roles' => $roles, 'selectedRoles' => $selectedRoles]);
     }
@@ -90,11 +90,11 @@ class UserController extends Controller
         return redirect()->route('user.show')->with('success', 'User is successfully updated')->with('successDuration', 5);
     }
 
-    public function destroy(Request $request)
+    public function destroy($userId)
     {
-        $userIds = $request->input('users');
-        User::whereIn('id', $userIds)->delete();
+        User::where('id', $userId)->delete();
 
-        return redirect()->route('user.show')->with('success', 'Selected users have been deleted successfully!');
+        return redirect()->route('user.show')->with('success', 'The user has been deleted successfully!');
     }
+
 }

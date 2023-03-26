@@ -22,7 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'phonenumber',
-        'role'
+        'role',
+        'is_admin'
     ];
 
     /**
@@ -48,6 +49,17 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'user_roles');
     }
+
+    public function webshop()
+    {
+        return $this->belongsTo(Webshop::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->is_admin && $this->webshop !== null;
+    }
+
 
 }
 

@@ -24,7 +24,7 @@
             <x-error-message :error="'roles'"/>
 
             <div class="mt-5">
-                <button type="submit" class="bg-black text-white font-bold py-2 px-4 rounded-lg mr-2">
+                <button type="submit" class="bg-black text-white font-bold py-2 px-4 rounded-lg">
                     Update User
                 </button>
 
@@ -32,6 +32,14 @@
                         class="bg-white border border-black text-black font-bold py-2 px-5 rounded-lg">
                     Cancel
                 </button>
+
+                <form method="POST" action="{{ route('user.destroy', $user->id) }}">
+                    @csrf
+                    @method('DELETE')
+                        <button type="submit" class="bg-white border border-black text-black font-bold py-2 px-5 rounded-lg ml-5">
+                            Delete
+                        </button>
+                </form>
             </div>
         </form>
     </div>
