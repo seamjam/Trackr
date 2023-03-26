@@ -1,10 +1,8 @@
 <x-app-layout>
-
-
     <div class="bg-white p-4 rounded-lg" style="max-width: 950px; margin: 50px auto 0;">
         <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">Edit {{$user->name}}</h1>
 
-        <form method="POST" action="{{ route('user.update', $user->id) }}">
+        <form method="POST" action="{{ route('webshop.user.update', $user->id) }}">
             @csrf
             @method('PUT')
             <x-form-input name="name" :value="$user->name"/>
@@ -28,20 +26,31 @@
                     Update User
                 </button>
 
-                <button type="button" onclick="window.location.href='{{ route('user.show') }}'"
+                <button type="button" onclick="window.location.href='{{ route('webshop.user.show') }}'"
                         class="bg-white border border-black text-black font-bold py-2 px-5 rounded-lg">
-                    Cancel
+                    Return
                 </button>
 
-                <form method="POST" action="{{ route('user.destroy', $user->id) }}">
-                    @csrf
-                    @method('DELETE')
-                        <button type="submit" class="bg-white border border-black text-black font-bold py-2 px-5 rounded-lg ml-5">
-                            Delete
-                        </button>
-                </form>
+                <button type="button" id="show-delete-btn"
+                        class="bg-white border border-black text-black font-bold py-2 px-5 rounded-lg ml-5">
+                    Delete
+                </button>
             </div>
+        </form>
+
+        <form method="POST" action="{{ route('webshop.user.destroy', $user->id) }}" id="delete-form"
+              style="display: none;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="bg-red-500 text-white font-bold py-2 px-5 rounded-lg mt-5">
+                Confirm Delete
+            </button>
         </form>
     </div>
 
+    <script>
+        document.getElementById('show-delete-btn').addEventListener('click', function () {
+            document.getElementById('delete-form').style.display = 'block';
+        });
+    </script>
 </x-app-layout>

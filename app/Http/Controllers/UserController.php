@@ -11,8 +11,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware(['role:superadmin', 'role:webshop']);
+        $this->middleware(['auth', 'role:superadmin,webshop']);
     }
 
     public function usersShow(Request $request)
@@ -20,6 +19,12 @@ class UserController extends Controller
         $query = User::whereDoesntHave('roles', function ($query) {
             $query->whereIn('id', [1, 2]);
         });
+
+        //
+//        if ($request->has('search')) {
+//            $search = $request->input('search');
+//            $query->whereRaw("MATCH(name, email) AGAINST(? IN BOOLEAN MODE)", ["*$search*"]);
+//        }
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -34,10 +39,31 @@ class UserController extends Controller
         return view('superadmin.user.show', ['users' => $users]);
     }
 
+    public function webshopUserShow(Request $request)
+    {
+
+        $query = User::where('webshop_id', auth()->user()->webshop_id)
+        ->whereDoesntHave('roles', function ($query) {
+            $query->whereIn('id', [1, 2]);
+        });
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                    ->orWhere('email', 'like', "%$search%");
+            });
+        }
+
+        $users = $query->paginate(10);
+
+        return view('webshop.user.show', ['users' => $users]);
+    }
+
     public function create()
     {
         $roles = Role::where('name', '!=', 'superadmin')->where('name', '!=', 'webshop')->get();
-        return view('superadmin.user.create', ['roles' => $roles, 'selectedRoles' => []]);
+        return view('webshop.user.create', ['roles' => $roles, 'selectedRoles' => []]);
     }
 
     public function store(Request $request)
@@ -55,19 +81,20 @@ class UserController extends Controller
         $user->email = $validatedData['email'];
         $user->password = Hash::make('Welkom2023');
         $user->phonenumber = $validatedData['phonenumber'];
+        $user->webshop_id = auth()->user()->webshop_id;
         $user->is_admin = false;
         $user->save();
 
         $user->roles()->attach($validatedData['roles']);
 
-        return redirect()->route('user.show')->with('success', 'user is succesfully created')->with('successDuration', 5);
+        return redirect()->route('webshop.user.show')->with('success', 'user is succesfully created')->with('successDuration', 5);
     }
 
     public function edit(User $user)
     {
         $roles = Role::where('name', '!=', 'superadmin')->where('name', '!=', 'webshop')->get();
         $selectedRoles = $user->roles->pluck('id')->toArray();
-        return view('superadmin.user.edit', ['user' => $user, 'roles' => $roles, 'selectedRoles' => $selectedRoles]);
+        return view('webshop.user.edit', ['user' => $user, 'roles' => $roles, 'selectedRoles' => $selectedRoles]);
     }
 
     public function update(Request $request, User $user)
@@ -87,14 +114,13 @@ class UserController extends Controller
 
         $user->roles()->sync($validatedData['roles']);
 
-        return redirect()->route('user.show')->with('success', 'User is successfully updated')->with('successDuration', 5);
+        return redirect()->route('webshop.user.show')->with('success', 'User is successfully updated')->with('successDuration', 5);
     }
 
     public function destroy($userId)
     {
         User::where('id', $userId)->delete();
-
-        return redirect()->route('user.show')->with('success', 'The user has been deleted successfully!');
+        return redirect()->route('webshop.user.show')->with('success', 'The user has been deleted successfully!');
     }
 
 }

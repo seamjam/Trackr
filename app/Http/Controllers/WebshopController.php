@@ -29,10 +29,17 @@ class WebshopController extends Controller
                     ->orWhere('email', 'like', "%$search%");
             });
         }
+//
+//        if ($request->has('search')) {
+//            $search = $request->input('search');
+//            $query->whereRaw("MATCH(name, email) AGAINST(? IN BOOLEAN MODE)", ["*$search*"]);
+//        }
+
         $webshopUsers = $query->with('webshop')->paginate(10);
 
         return view('superadmin.webshop.show', ['users' => $webshopUsers]);
     }
+
 
     public function create()
     {

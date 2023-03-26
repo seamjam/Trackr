@@ -25,6 +25,19 @@
                                 {{ __('Trackr webshops') }}
                             </x-nav-link>
                         @endif
+
+                            @if (auth()->user()->roles()->where('name', 'webshop')->exists())
+                                <x-nav-link :href="route('webshop.user.show')" :active="request()->routeIs('superadmin.user.show')">
+                                    {{ __('Webshop employees') }}
+                                </x-nav-link>
+                            @endif
+
+                            @if (auth()->user()->roles()->where('name', 'administrator')->exists())
+                                <x-nav-link :href="route('administrator.labels.show')" :active="request()->routeIs('administrator.labels.show')">
+                                    {{ __('Labels') }}
+                                </x-nav-link>
+                            @endif
+
                     @endauth
                 </div>
             </div>
