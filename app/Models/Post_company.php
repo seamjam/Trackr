@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Post_company extends Model
 {
     use HasFactory;
+
+
+    public function package()
+    {
+        return $this->hasMany(Package::class);
+    }
+
 }

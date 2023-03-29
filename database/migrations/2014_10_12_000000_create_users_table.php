@@ -78,16 +78,19 @@ return new class extends Migration
         //package
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->unsignedBigInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('statuses');
-            $table->string('tracking_number')->nullable();
+            $table->string('tracking_number')->unique();
             $table->unsignedBigInteger('webshop_id')->nullable();
             $table->foreign('webshop_id')->references('id')->on('webshops')->nullabele();
             $table->unsignedBigInteger('post_company_id')->nullable();
             $table->foreign('post_company_id')->references('id')->on('post_companies')->nullabele();
             $table->unsignedBigInteger('review_id')->nullable();
-            $table->foreign('review_id')->references('id')->on('reviews');
+            $table->foreign('review_id')->references('id')->on('reviews')->nullablele();
+            $table->string('receiver_firstname')->nullable();
+            $table->string('receiver_lastname')->nullable();
+            $table->string('receiver_postal_code')->nullable();
+            $table->string('receiver_house_number')->nullable();
             $table->timestamps();
         });
 

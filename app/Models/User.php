@@ -60,6 +60,5 @@ class User extends Authenticatable
         return $this->is_admin && $this->webshop !== null;
     }
 
-
 }
 

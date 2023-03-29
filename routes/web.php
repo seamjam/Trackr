@@ -60,6 +60,7 @@ Route::post('/label/create', [LabelController::class,'store'])->name('administra
 Route::delete('/label/{label}', [LabelController::class, 'destroy'])->name('administrator.labels.destroy');
 Route::get('/label/{label}', [LabelController::class, 'edit'])->name('administrator.labels.edit');
 Route::put('/label/{label}', [LabelController::class, 'update'])->name('administrator.labels.update');
+Route::get('/pdf', [LabelController::class, 'generatePDF'])->name('administrator.labels.PDF');
 
 
 

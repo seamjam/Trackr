@@ -12,7 +12,7 @@
                     Add new Trackr user
                 </a>
             </div>
-            <form method="GET" action="{{ route('user.show') }}">
+            <form method="GET" action="{{ route('webshop.user.show') }}">
                 <div class="">
                     <input type="text" name="search" class="border-gray-400 border-2 rounded-lg w-full mb-5"
                            placeholder="Search user">
@@ -32,5 +32,4 @@
             <p class="text-center mb-5 mt-5"><i>There are no registered Trackr users</i></p>
         @endif
 
-    </div>
 </x-app-layout>

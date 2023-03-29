@@ -92,8 +92,7 @@ class DatabaseSeeder extends Seeder
 
 
         $packages = [
-            ['name' => 'packet1',
-            'status_id' => '1', 'post_company_id' => '1',
+            ['status_id' => '1', 'post_company_id' => '1',
             'tracking_number' => '13789373',
             'webshop_id' => '1', 'review_id' => '1',
             ]
