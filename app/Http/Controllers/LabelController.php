@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Package;
 use App\Models\Status;
 use App\Models\Post_company;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\PDF;
+use App\Http\Controllers\Controller;
+use League\Csv\Reader;
+use Picqer\Barcode\BarcodeGeneratorHTML;
+
 
 class LabelController extends Controller
 {
@@ -38,15 +40,6 @@ class LabelController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        $postCompanies = Post_company::all();
-
-        return view('administrator.labels.create', [
-            'post_companies' => $postCompanies,
-        ]);
-    }
-
     public function store(Request $request)
     {
         $labels = json_decode($request->input('labels'), true);
@@ -70,25 +63,82 @@ class LabelController extends Controller
         return redirect()->route('administrator.labels.show')->with('success', 'The labels have been created successfully!');
     }
 
+    public function create()
+    {
+        $postCompanies = Post_company::all();
+
+        return view('administrator.labels.create', [
+            'post_companies' => $postCompanies,
+        ]);
+    }
+
     public function generatePDF(Request $request)
     {
-        $labels = Package::all();
+        $selectedPackagesIds = explode(',', request('selectedPackages'));
+
+        $selectedPackages = Package::whereIn('id', $selectedPackagesIds)->get();
+
         $pdf = app('dompdf.wrapper');
         $labelHTML = '';
 
-        foreach ($labels as $label) {
+        $generator = new BarcodeGeneratorHTML();
+
+        foreach ($selectedPackages as $label) {
+            $barcode = $generator->getBarcode($label->id, $generator::TYPE_CODE_128, 2, 50, 'black', true);
+
             $data = [
-                'title' => 'Dit is een test label',
+                'title' => $label->receiver_firstname . ' ' . $label->receiver_lastname,
                 'date' => date('m/d/Y'),
-                'label' => $label
+                'label' => $label,
+                'barcode' => $barcode
             ];
 
             $labelHTML .= view('administrator.labels.PDF', $data)->render();
         }
 
+
         $pdf->loadHTML($labelHTML);
 
         return $pdf->download('labels.pdf');
+    }
+
+    public function importCSV(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
+
+        $csv_file = $request->file('csv_file');
+        $csv = Reader::createFromPath($csv_file->path(), 'r');
+        $csv->setHeaderOffset(0);
+        $records = $csv->getRecords();
+
+        foreach ($records as $record) {
+            $cleanedRecord = [];
+
+            foreach ($record as $key => $value) {
+                $cleanedKey = trim(str_replace(';', '', $key));
+                $cleanedValue = trim(str_replace(';', '', $value));
+                $cleanedRecord[$cleanedKey] = $cleanedValue;
+            }
+
+            try {
+                Package::create([
+                    'status_id' => 1,
+                    'tracking_number' => 'TN-' . uniqid(),
+                    'webshop_id' => auth()->user()->webshop_id,
+                    'post_company_id' => $cleanedRecord['post_company_id'],
+                    'receiver_firstname' => $cleanedRecord['receiver_firstname'],
+                    'receiver_lastname' => $cleanedRecord['receiver_lastname'],
+                    'receiver_postal_code' => $cleanedRecord['receiver_postal_code'],
+                    'receiver_house_number' => $cleanedRecord['receiver_house_number']
+                ]);
+            } catch (\Exception $e) {
+                return redirect()->route('administrator.labels.show')->with('error', 'Labels were not noted correctly!');
+            }
+        }
+
+        return redirect()->route('administrator.labels.show')->with('success', 'Labels imported successfully');
     }
 
 

@@ -36,4 +36,9 @@ class Package extends Model
     {
         return $this->belongsTo(Review::class);
     }
+
+    public function webshop()
+    {
+        return $this->belongsTo(Webshop::class);
+    }
 }

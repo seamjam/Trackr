@@ -7,19 +7,34 @@
 
         <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">labels overview</h1>
         <div class="row">
-            <div class="mb-5 float-right">
+            <div class="mb-3 float-right">
+                <div class="flex">
 
-                <button id="create-pdf-button">Create PDF</button>
-                <a href="{{ route('administrator.labels.PDF') }}"
-                    class="border-gray-400 bg-black border-2  text-white rounded-lg font-bold py-3 px-4 rounded-lg mr-3 mb-5">
-                    Create PDF
-                </a>
+                    <form id="csv-import-form" method="POST" action="{{ route('administrator.labels.importCSV') }}"
+                          enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" name="csv_file" id="csv_file" class="hidden" accept=".csv">
+                        <button type="button" id="upload-csv-button"
+                                class="border-gray-400 bg-black border-2 text-white rounded-lg font-bold py-3 px-4 rounded-lg mr-3 mb-5">
+                            Upload CSV
+                        </button>
+                    </form>
 
-                <a href="{{ route('administrator.labels.create') }}"
-                   class="border-gray-400 bg-black border-2  text-white rounded-lg font-bold py-3 px-4 rounded-lg mb-5">
-                    Add new label
-                </a>
+                    <form id="pdf-form" method="POST" action="{{ route('administrator.labels.PDF') }}">
+                        @csrf
+                        <input type="hidden" name="selectedPackages" id="selectedPackages">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <button type="submit" id="create-pdf-button"
+                                class="border-gray-400 bg-black border-2 text-white rounded-lg font-bold py-3 px-4 rounded-lg mr-3 mb-5">
+                            Create PDF
+                        </button>
+                    </form>
 
+                    <a href="{{ route('administrator.labels.create') }}"
+                       class="border-gray-400 bg-black border-2  text-white rounded-lg font-bold py-3 px-4 rounded-lg mb-5">
+                        Add new label
+                    </a>
+                </div>
             </div>
 
             <form action="{{ route('administrator.labels.show') }}" method="get">
@@ -43,7 +58,7 @@
 
             <form method="GET" action="{{ route('administrator.labels.show') }}">
                 <div class="">
-                    <input type="text" name="search" class="border-gray-400 border-2 rounded-lg w-full mb-5"
+                    <input type="text" name="search" class="border-gray-400 border-2 rounded-lg w-full mb-3"
                            placeholder="Search label">
                 </div>
             </form>
@@ -63,16 +78,27 @@
     </div>
 </x-app-layout>
 
+
 <script>
-    // voeg een event listener toe aan de "Create PDF" knop
-    document.getElementById('create-pdf-button').addEventListener('click', function() {
-        // haal alle geselecteerde checkboxes op
-        const selectedPackages = document.querySelectorAll('input[name="selectedObjects[]"]:checked');
-        // map de geselecteerde checkbox-waarden naar een array met ids
-        const selectedPackageIds = Array.from(selectedPackages).map(el => el.value);
-        // zet de geselecteerde package ids in een verborgen input veld genaamd 'selectedPackages'
-        document.getElementById('selectedPackages').value = selectedPackageIds.join(',');
-        // verstuur het formulier om de PDF te genereren
-        document.getElementById('pdf-form').submit();
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('create-pdf-button').addEventListener('click', function (event) {
+            const selectedPackages = document.querySelectorAll('input[name="selectedObjects[]"]:checked');
+            const selectedPackageIds = Array.from(selectedPackages).map(el => el.value);
+            document.getElementById('selectedPackages').value = selectedPackageIds.join(',');
+            document.getElementById('pdf-form').submit();
+        });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('upload-csv-button').addEventListener('click', function () {
+            document.getElementById('csv_file').click();
+        });
+
+        document.getElementById('csv_file').addEventListener('change', function () {
+            document.getElementById('csv-import-form').submit();
+        });
+    });
+
 </script>
+
+
