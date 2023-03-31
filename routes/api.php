@@ -20,7 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum', 'role:administrator'])->group(function () {
-    Route::post('/packages', [ApiController::class, 'apiStore']);
+    Route::post('/packages', [ApiController::class, 'registerPackageStore']);
+});
+
+Route::middleware(['auth:sanctum', 'role:courier'])->group(function () {
+    Route::post('/update/status', [ApiController::class, 'updateStatus']);
 });
 
 

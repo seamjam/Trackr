@@ -36,7 +36,7 @@ class UserController extends Controller
 
         $users = $query->paginate(10);
 
-        return view('superadmin.user.show', ['users' => $users]);
+        return view('superadmin.user.show.blade.php', ['users' => $users]);
     }
 
     public function webshopUserShow(Request $request)
@@ -57,7 +57,7 @@ class UserController extends Controller
 
         $users = $query->paginate(10);
 
-        return view('webshop.user.show', ['users' => $users]);
+        return view('webshop.user.show.blade.php', ['users' => $users]);
     }
 
     public function create()
@@ -87,7 +87,7 @@ class UserController extends Controller
 
         $user->roles()->attach($validatedData['roles']);
 
-        return redirect()->route('webshop.user.show')->with('success', 'user is succesfully created')->with('successDuration', 5);
+        return redirect()->route('webshop.user.show.blade.php')->with('success', 'user is succesfully created')->with('successDuration', 5);
     }
 
     public function edit(User $user)
@@ -114,13 +114,13 @@ class UserController extends Controller
 
         $user->roles()->sync($validatedData['roles']);
 
-        return redirect()->route('webshop.user.show')->with('success', 'User is successfully updated')->with('successDuration', 5);
+        return redirect()->route('webshop.user.show.blade.php')->with('success', 'User is successfully updated')->with('successDuration', 5);
     }
 
     public function destroy($userId)
     {
         User::where('id', $userId)->delete();
-        return redirect()->route('webshop.user.show')->with('success', 'The user has been deleted successfully!');
+        return redirect()->route('webshop.user.show.blade.php')->with('success', 'The user has been deleted successfully!');
     }
 
 }

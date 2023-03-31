@@ -78,7 +78,7 @@
             </div>
 
         @else
-            <p class="text-center mb-5 mt-5"><i>There are no registered labels</i></p>
+            <p class="text-center mb-5 mt-5"><i>There are no registered packages</i></p>
         @endif
 
     </div>

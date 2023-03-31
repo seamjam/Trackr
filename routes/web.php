@@ -7,6 +7,7 @@ use \App\Http\Controllers\WebshopController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\PickupRequestController;
+use App\Http\Controllers\CourierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,11 +36,11 @@ Route::middleware('auth')->group(function () {
 
 //superadmin
 Route::get('/superadmin', [UserController::class, 'index'])->name('superadmin.index');
-Route::get('/users', [UserController::class, 'usersShow'])->name('user.show');
+Route::get('/users', [UserController::class, 'usersShow'])->name('user.show.blade.php');
 
 //superadmin
 //webshop
-Route::get('/webshops', [WebshopController::class, 'webshopsShow'])->name('webshop.show');
+Route::get('/webshops', [WebshopController::class, 'webshopsShow'])->name('webshop.show.blade.php');
 Route::get('/webshop/create', [WebshopController::class, 'create'])->name('webshop.create');
 Route::get('/webshop/{user}', [WebshopController::class, 'edit'])->name('webshop.edit');
 Route::put('/webshop/{user}', [WebshopController::class, 'update'])->name('webshop.update');
@@ -47,7 +48,7 @@ Route::post('/webshop/create', [WebshopController::class, 'store'])->name('websh
 
 //webshop
 //user
-Route::get('/employees', [UserController::class, 'webshopUserShow'])->name('webshop.user.show');
+Route::get('/employees', [UserController::class, 'webshopUserShow'])->name('webshop.user.show.blade.php');
 Route::get('/user/create', [UserController::class, 'create'])->name('webshop.user.create');
 Route::post('/user/create', [UserController::class, 'store'])->name('webshop.user.store');
 Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('webshop.user.destroy');
@@ -67,13 +68,18 @@ Route::post('/csv', [LabelController::class,'importCSV'])->name('administrator.l
 
 //pickups
 Route::middleware(['auth', 'role:administrator'])->group(function () {
-    Route::get('/pickups', [PickupRequestController::class, 'show'])->name('pickups.show');
+    Route::get('/pickups', [PickupRequestController::class, 'show'])->name('administrator.pickups.show');
     Route::post('/pickups', [PickupRequestController::class, 'store'])->name('administrator.pickups.store');
     Route::get('/pickups/create', [PickupRequestController::class, 'create'])->name('administrator.pickups.create');
+});
+
+Route::middleware(['auth', 'role:courier'])->group(function () {
+    Route::get('/registered/packages', [CourierController::class, 'show'])->name('courier.packages.show');;
 });
 
 
 //authentication
 Route::get('/generate-api-token', [ApiController::class, 'generateApiToken'])->name('generate-api-token')->middleware(['auth', 'role:administrator']);
+Route::get('/generate-api-token/courier', [ApiController::class, 'generateApiTokenCourier'])->name('generate-api-token-courier')->middleware(['auth', 'role:courier']);
 
 require __DIR__.'/auth.php';

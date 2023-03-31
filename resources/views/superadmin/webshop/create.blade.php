@@ -22,7 +22,7 @@
                     Add User and Webshop
                 </button>
 
-                <button type="button" onclick="window.location.href='{{ route('webshop.show') }}'"
+                <button type="button" onclick="window.location.href='{{ route('webshop.show.blade.php') }}'"
                         class="bg-white border border-black text-black font-bold py-2 px-5 rounded-lg">
                     Return
                 </button>

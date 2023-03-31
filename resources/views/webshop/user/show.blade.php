@@ -12,7 +12,7 @@
                     Add new Trackr user
                 </a>
             </div>
-            <form method="GET" action="{{ route('webshop.user.show') }}">
+            <form method="GET" action="{{ route('webshop.user.show.blade.php') }}">
                 <div class="">
                     <input type="text" name="search" class="border-gray-400 border-2 rounded-lg w-full mb-5"
                            placeholder="Search user">

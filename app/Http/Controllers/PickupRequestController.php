@@ -32,7 +32,7 @@ class PickupRequestController extends Controller
             Package::whereIn('id', $selectedPackageIds)->update([
                 'pickupRequest_id' => $pickupRequest->id
             ]);
-            return redirect()->route('pickups.show')->with('success', 'Pickup scheduled successfully.');
+            return redirect()->route('pickups.show.blade.php')->with('success', 'Pickup scheduled successfully.');
         } else {
             $errors = $request->errors();
             return redirect()->route('administrator.pickups.create')->with('error', $errors);

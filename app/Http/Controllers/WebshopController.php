@@ -37,7 +37,7 @@ class WebshopController extends Controller
 
         $webshopUsers = $query->with('webshop')->paginate(10);
 
-        return view('superadmin.webshop.show', ['users' => $webshopUsers]);
+        return view('superadmin.webshop.show.blade.php', ['users' => $webshopUsers]);
     }
 
 
@@ -85,7 +85,7 @@ class WebshopController extends Controller
         $user->save();
         $user->roles()->attach($role);
 
-        return redirect()->route('webshop.show')->with('success', 'User and Webshop are succesfully created')->with('successDuration', 5);
+        return redirect()->route('webshop.show.blade.php')->with('success', 'User and Webshop are succesfully created')->with('successDuration', 5);
     }
 
     public function update(Request $request, $id)
@@ -114,7 +114,7 @@ class WebshopController extends Controller
         $webshop->house_number = $validatedWebshopData['house_number'];
         $webshop->save();
 
-        return redirect()->route('webshop.show')->with('success', 'User and Webshop are succesfully updated')->with('successDuration', 5);
+        return redirect()->route('webshop.show.blade.php')->with('success', 'User and Webshop are succesfully updated')->with('successDuration', 5);
     }
 
 

@@ -26,7 +26,7 @@
                     Update User
                 </button>
 
-                <button type="button" onclick="window.location.href='{{ route('webshop.user.show') }}'"
+                <button type="button" onclick="window.location.href='{{ route('webshop.user.show.blade.php') }}'"
                         class="bg-white border border-black text-black font-bold py-2 px-5 rounded-lg">
                     Return
                 </button>
@@ -49,7 +49,7 @@
     </div>
 
     <script>
-        document.getElementById('show-delete-btn').addEventListener('click', function () {
+        document.getElementById('show.blade.php-delete-btn').addEventListener('click', function () {
             document.getElementById('delete-form').style.display = 'block';
         });
     </script>

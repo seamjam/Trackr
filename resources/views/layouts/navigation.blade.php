@@ -16,19 +16,19 @@
 
                     @auth
                         @if (auth()->user()->roles()->where('name', 'superadmin')->exists())
-                            <x-nav-link :href="route('user.show')" :active="request()->routeIs('superadmin.user.show')">
+                            <x-nav-link :href="route('user.show.blade.php')" :active="request()->routeIs('superadmin.user.show.blade.php')">
                                 {{ __('Trackr users') }}
                             </x-nav-link>
 
-                            <x-nav-link :href="route('webshop.show')"
-                                        :active="request()->routeIs('superadmin.webshop.show')">
+                            <x-nav-link :href="route('webshop.show.blade.php')"
+                                        :active="request()->routeIs('superadmin.webshop.show.blade.php')">
                                 {{ __('Trackr webshops') }}
                             </x-nav-link>
                         @endif
 
                         @if (auth()->user()->roles()->where('name', 'webshop')->exists())
-                            <x-nav-link :href="route('webshop.user.show')"
-                                        :active="request()->routeIs('superadmin.user.show')">
+                            <x-nav-link :href="route('webshop.user.show.blade.php')"
+                                        :active="request()->routeIs('superadmin.user.show.blade.php')">
                                 {{ __('Webshop employees') }}
                             </x-nav-link>
                         @endif
@@ -39,7 +39,7 @@
                                 {{ __('Labels') }}
                             </x-nav-link>
 
-                            <x-nav-link :href="route('pickups.show')" :active="request()->routeIs('pickups.show')">
+                            <x-nav-link :href="route('administrator.pickups.show')" :active="request()->routeIs('administrator.pickups.show')">
                                 {{ __('Pickup') }}
                             </x-nav-link>
 
@@ -48,8 +48,21 @@
                                         onclick="event.preventDefault(); generateApiToken();">
                                 {{ __('Generate API Token') }}
                             </x-nav-link>
-
                         @endif
+
+                            @if (auth()->user()->roles()->where('name', 'courier')->exists())
+                                <x-nav-link :href="route('courier.packages.show')"
+                                            :active="request()->routeIs('courier.packages.show')">
+                                    {{ __('Registered Packages') }}
+                                </x-nav-link>
+
+                                <x-nav-link :href="route('generate-api-token-courier')"
+                                            :active="request()->routeIs('generate-api-token-courier')"
+                                            onclick="event.preventDefault(); generateApiTokenCourier();">
+                                    {{ __('Generate API Token') }}
+                                </x-nav-link>
+                            @endif
+
 
                     @endauth
                 </div>
@@ -147,6 +160,25 @@
 <script>
     function generateApiToken() {
         fetch('/generate-api-token', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin'
+        }).then(response => response.json())
+            .then(data => {
+                if (data.api_token) {
+                    alert('Generated API Token: ' + data.api_token);
+                } else {
+                    alert('Error generating API token.');
+                }
+            });
+    }
+
+    function generateApiTokenCourier() {
+        fetch('/generate-api-token/courier', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

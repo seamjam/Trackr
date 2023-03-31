@@ -20,7 +20,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
         //user table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -32,6 +31,8 @@ return new class extends Migration
             $table->unsignedBigInteger('webshop_id')->nullable();
             $table->foreign('webshop_id')->references('id')->on('webshops');
             $table->boolean('is_admin');
+            $table->string('receiver_postal_code')->nullable();
+            $table->string('receiver_house_number')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -84,7 +85,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
         //package
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
@@ -112,8 +112,6 @@ return new class extends Migration
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
-
-
     }
 
     /**

@@ -139,5 +139,4 @@ class LabelController extends Controller
         return redirect()->route('administrator.labels.show')->with('success', 'Labels imported successfully');
     }
 
-
 }

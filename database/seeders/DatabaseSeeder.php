@@ -44,6 +44,39 @@ class DatabaseSeeder extends Seeder
             'webshop_id' => 1
         ]);
 
+        $administrator1 = User::create([
+            'name' => 'administrator1',
+            'email' => 'administrator1@trackr.com',
+            'password' => Hash::make('password'),
+            'phonenumber' => '067774567869',
+            'is_admin' => false,
+            'webshop_id' => 1
+        ]);
+
+        $dhl = User::create([
+            'name' => 'dhl',
+            'email' => 'dhl@trackr.com',
+            'password' => Hash::make('password'),
+            'phonenumber' => '067774567869',
+            'is_admin' => false,
+        ]);
+
+        $postnl = User::create([
+            'name' => 'postnl',
+            'email' => 'postnl@trackr.com',
+            'password' => Hash::make('password'),
+            'phonenumber' => '067774567869',
+            'is_admin' => false,
+        ]);
+
+        $ups = User::create([
+            'name' => 'ups',
+            'email' => 'ups@trackr.com',
+            'password' => Hash::make('password'),
+            'phonenumber' => '067774567869',
+            'is_admin' => false,
+        ]);
+
         //roles
         $roles = [
             ['name' => 'superadmin'],
@@ -51,6 +84,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'administrator'],
             ['name' => 'packer'],
             ['name' => 'receiver_customer'],
+            ['name' => 'courier'],
         ];
         DB::table('roles')->insert($roles);
 
@@ -66,6 +100,30 @@ class DatabaseSeeder extends Seeder
             'role_id' => $webshop_owner_rol->id,
         ]);
 
+        $administrator_rol = Role::where('name', 'administrator')->first();
+        DB::table('user_roles')->insert([
+            'user_id' => $administrator1->id,
+            'role_id' => $administrator_rol->id,
+        ]);
+
+        $courier_rol = Role::where('name', 'courier')->first();
+        DB::table('user_roles')->insert([
+            'user_id' => $postnl->id,
+            'role_id' => $courier_rol->id,
+        ]);
+
+        $courier_rol = Role::where('name', 'courier')->first();
+        DB::table('user_roles')->insert([
+            'user_id' => $dhl->id,
+            'role_id' => $courier_rol->id,
+        ]);
+
+        $courier_rol = Role::where('name', 'courier')->first();
+        DB::table('user_roles')->insert([
+            'user_id' => $ups->id,
+            'role_id' => $courier_rol->id,
+        ]);
+
         $status = [
             ['name' => 'registered'],
             ['name' => 'printed'],
@@ -78,18 +136,16 @@ class DatabaseSeeder extends Seeder
 
         $post_companies = [
             ['name' => 'dhl'],
-            ['name' => 'post_nl'],
+            ['name' => 'postnl'],
             ['name' => 'ups'],
         ];
         Post_company::insert($post_companies);
-
 
         $reviews = [
             ['stars' => 5,
              'description' => 'hele fijne delivery, zal het zeker nog eens doen. via deze post bedrijf hihi']
         ];
         DB::table('reviews')->insert($reviews);
-
 
         $packages = [
             ['status_id' => '1', 'post_company_id' => '1',

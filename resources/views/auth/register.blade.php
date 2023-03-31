@@ -39,6 +39,21 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
+        <!-- postal_code -->
+        <div class="mt-4">
+            <x-input-label for="postal_code" :value="__('Postal Code')" />
+            <x-text-input id="postal_code" class="block mt-1 w-full" type="text" name="postal_code" :value="old('postal_code')" required />
+            <x-input-error :messages="$errors->get('postal_code')" class="mt-2" />
+        </div>
+
+        <!-- house_number -->
+        <div class="mt-4">
+            <x-input-label for="house_number" :value="__('House Number')" />
+            <x-text-input id="house_number" class="block mt-1 w-full" type="number" name="house_number" :value="old('house_number')" required />
+            <x-input-error :messages="$errors->get('house_number')" class="mt-2" />
+        </div>
+
+
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
