@@ -95,8 +95,6 @@ class LabelController extends Controller
 
             $labelHTML .= view('administrator.labels.PDF', $data)->render();
         }
-
-
         $pdf->loadHTML($labelHTML);
 
         return $pdf->download('labels.pdf');

@@ -8,6 +8,34 @@ function addLabel() {
     const receiver_first_name = document.getElementById("receiver_first_name").value;
     const receiver_last_name = document.getElementById("receiver_last_name").value;
 
+    //validation
+    const postalCodeRegex = /^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/;
+
+    if (isNaN(label_count)) {
+        alert("Amount should be a number");
+        return;
+    }
+
+    if (isNaN(house_number)) {
+        alert("House number should be a number");
+        return;
+    }
+
+    if (!postalCodeRegex.test(postal_code)) {
+        alert("Incorrect postal code: " + postal_code);
+        return;
+    }
+
+    if (!/^[a-zA-Z]+$/.test(receiver_first_name)) {
+        alert("First name should only contain letters");
+        return;
+    }
+
+    if (!/^[a-zA-Z]+$/.test(receiver_last_name)) {
+        alert("Last name should only contain letters");
+        return;
+    }
+
     for (let i = 0; i < label_count; i++) {
         const label = {
             label_count,
@@ -23,6 +51,7 @@ function addLabel() {
     renderTable();
     saveLabels();
 }
+
 
 function saveLabels() {
     const labelsJSON = JSON.stringify(labels);
@@ -88,5 +117,26 @@ function renderTable() {
         labelsInput.value = JSON.stringify(labels);
     });
 }
+
+
+function clearTable() {
+    const tableBody = document.querySelector("#label_table tbody");
+    tableBody.innerHTML = "";
+}
+
+const submitButton = document.querySelector("button[type='submit']");
+submitButton.addEventListener("click", submitForm);
+
+function submitForm() {
+    const labelsInput = document.querySelector("#labels_input");
+    labelsInput.value = JSON.stringify(labels);
+
+    document.querySelector("#myForm").submit();
+    clearTable();
+    localStorage.removeItem('labels');
+}
+
+
+
 
 

@@ -4,7 +4,7 @@
     <div class="bg-white p-4 rounded-lg" style="max-width: 1100px; margin: 50px auto 0;">
         <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">Create new label</h1>
 
-        <form method="POST" action="{{ route('administrator.labels.store') }}">
+        <form id="myForm" method="POST" action="{{ route('administrator.labels.store') }}">
             @csrf
 
             <div style="display:flex; flex-wrap:wrap">
@@ -25,7 +25,6 @@
                 <x-input-form-label label="Last Name" type="text" placeholder="Receiver last name"
                                     id="receiver_last_name"/>
                     <button type="button" onclick="addLabel()" class="text-black  px-0.5 rounded pt-3 pl-3"> Add </button>
-
             </div>
 
             <div style="border: 1px solid black; height: 250px; overflow-y: auto;">
@@ -36,12 +35,10 @@
             </div>
 
             <input type="hidden" name="labels" id="labels_input">
-
-            <button type="submit" class="bg-black text-white font-bold py-2 px-4 rounded-lg mr-2 mt-4">Import CSV
-            </button>
             <button type="submit" class="bg-black text-white font-bold py-2 px-4 rounded-lg mr-2 mt-4">Create Label
             </button>
         </form>
     </div>
 </x-app-layout>
+
 

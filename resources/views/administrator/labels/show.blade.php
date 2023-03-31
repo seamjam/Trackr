@@ -5,17 +5,23 @@
 
     <div class="bg-white p-4 rounded-lg" style="width: 1400px; margin: 50px auto 0;">
 
-        <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">labels overview</h1>
+        <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">Registered packages</h1>
         <div class="row">
             <div class="mb-3 float-right">
                 <div class="flex">
+
+                    <button type="button"
+                            class="border-gray-400 bg-black border-2 text-white rounded-lg font-bold py-2 px-4 rounded-lg mb-5 mr-2"
+                            id="plan-pickup-button">
+                        Plan Pickup
+                    </button>
 
                     <form id="csv-import-form" method="POST" action="{{ route('administrator.labels.importCSV') }}"
                           enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="csv_file" id="csv_file" class="hidden" accept=".csv">
                         <button type="button" id="upload-csv-button"
-                                class="border-gray-400 bg-black border-2 text-white rounded-lg font-bold py-3 px-4 rounded-lg mr-3 mb-5">
+                                class="border-gray-400 bg-black border-2 text-white rounded-lg font-bold py-2 px-4 rounded-lg mr-2 mb-5">
                             Upload CSV
                         </button>
                     </form>
@@ -25,14 +31,14 @@
                         <input type="hidden" name="selectedPackages" id="selectedPackages">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <button type="submit" id="create-pdf-button"
-                                class="border-gray-400 bg-black border-2 text-white rounded-lg font-bold py-3 px-4 rounded-lg mr-3 mb-5">
-                            Create PDF
+                                class="border-gray-400 bg-black border-2 text-white rounded-lg font-bold py-2 px-4 rounded-lg mr-2 mb-5">
+                            Create label(s)
                         </button>
                     </form>
 
                     <a href="{{ route('administrator.labels.create') }}"
-                       class="border-gray-400 bg-black border-2  text-white rounded-lg font-bold py-3 px-4 rounded-lg mb-5">
-                        Add new label
+                       class="border-gray-400 bg-black border-2  text-white rounded-lg font-bold py-2 px-4 rounded-lg mb-5">
+                        Register package(s)
                     </a>
                 </div>
             </div>
@@ -96,6 +102,20 @@
 
         document.getElementById('csv_file').addEventListener('change', function () {
             document.getElementById('csv-import-form').submit();
+        });
+    });
+
+    function collectSelectedPackages() {
+        const selectedPackages = document.querySelectorAll('input[name="selectedObjects[]"]:checked');
+        const selectedPackageIds = Array.from(selectedPackages).map(el => el.value);
+        const pickupUrl = "{{ route('administrator.pickups.create', ['selectedPackages' => '']) }}" + selectedPackageIds.join(',');
+
+        window.location.href = pickupUrl;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('plan-pickup-button').addEventListener('click', function () {
+            collectSelectedPackages();
         });
     });
 

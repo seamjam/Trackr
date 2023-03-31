@@ -74,6 +74,15 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        //pickuprequests
+        Schema::create('pickup_requests', function (Blueprint $table) {
+            $table->id();
+            $table->date('date');
+            $table->time('time');
+            $table->string('status')->default('gepland');
+            $table->timestamps();
+        });
+
 
         //package
         Schema::create('packages', function (Blueprint $table) {
@@ -86,7 +95,9 @@ return new class extends Migration
             $table->unsignedBigInteger('post_company_id')->nullable();
             $table->foreign('post_company_id')->references('id')->on('post_companies')->nullabele();
             $table->unsignedBigInteger('review_id')->nullable();
-            $table->foreign('review_id')->references('id')->on('reviews')->nullablele();
+            $table->foreign('review_id')->references('id')->on('post_companies')->nullablele();
+            $table->unsignedBigInteger('pickupRequest_id')->nullable();
+            $table->foreign('pickupRequest_id')->references('id')->on('pickup_requests')->nullablele();
             $table->string('receiver_firstname')->nullable();
             $table->string('receiver_lastname')->nullable();
             $table->string('receiver_postal_code')->nullable();
@@ -94,13 +105,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
         //reset password token table
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
+
+
     }
 
     /**
@@ -116,6 +128,7 @@ return new class extends Migration
         Schema::dropIfExists('webshops');
         Schema::dropIfExists('reviews');
         Schema::dropIfExists('post_companies');
+        Schema::dropIfExists('pickup_requests');
     }
 };
 

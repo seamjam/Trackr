@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use \App\Http\Controllers\WebshopController;
 use App\Http\Controllers\LabelController;
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\PickupRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,5 +64,16 @@ Route::get('/label/{label}', [LabelController::class, 'edit'])->name('administra
 Route::put('/label/{label}', [LabelController::class, 'update'])->name('administrator.labels.update');
 Route::post('/pdf', [LabelController::class, 'generatePDF'])->name('administrator.labels.PDF');
 Route::post('/csv', [LabelController::class,'importCSV'])->name('administrator.labels.importCSV');
+
+//pickups
+Route::middleware(['auth', 'role:administrator'])->group(function () {
+    Route::get('/pickups', [PickupRequestController::class, 'show'])->name('pickups.show');
+    Route::post('/pickups', [PickupRequestController::class, 'store'])->name('administrator.pickups.store');
+    Route::get('/pickups/create', [PickupRequestController::class, 'create'])->name('administrator.pickups.create');
+});
+
+
+//authentication
+Route::get('/generate-api-token', [ApiController::class, 'generateApiToken'])->name('generate-api-token')->middleware(['auth', 'role:administrator']);
 
 require __DIR__.'/auth.php';

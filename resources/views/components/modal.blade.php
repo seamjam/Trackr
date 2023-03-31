@@ -1,6 +1,6 @@
 @props([
     'name',
-    'show.blade.php' => false,
+    'create.blade.php' => false,
     'maxWidth' => '2xl'
 ])
 

@@ -16,11 +16,16 @@ class Package extends Model
         'webshop_id',
         'post_company_id',
         'review_id',
+        'pickupRequest_id',
         'receiver_firstname',
         'receiver_lastname',
         'receiver_postal_code',
         'receiver_house_number'
     ];
+
+    public function pickupRequest(){
+        return $this->belongsTo(PickupRequest::class);
+    }
 
     public function status()
     {

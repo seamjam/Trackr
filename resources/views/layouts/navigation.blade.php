@@ -26,17 +26,30 @@
                             </x-nav-link>
                         @endif
 
-                            @if (auth()->user()->roles()->where('name', 'webshop')->exists())
-                                <x-nav-link :href="route('webshop.user.show')" :active="request()->routeIs('superadmin.user.show')">
-                                    {{ __('Webshop employees') }}
-                                </x-nav-link>
-                            @endif
+                        @if (auth()->user()->roles()->where('name', 'webshop')->exists())
+                            <x-nav-link :href="route('webshop.user.show')"
+                                        :active="request()->routeIs('superadmin.user.show')">
+                                {{ __('Webshop employees') }}
+                            </x-nav-link>
+                        @endif
 
-                            @if (auth()->user()->roles()->where('name', 'administrator')->exists())
-                                <x-nav-link :href="route('administrator.labels.show')" :active="request()->routeIs('administrator.labels.show')">
-                                    {{ __('Labels') }}
-                                </x-nav-link>
-                            @endif
+                        @if (auth()->user()->roles()->where('name', 'administrator')->exists())
+                            <x-nav-link :href="route('administrator.labels.show')"
+                                        :active="request()->routeIs('administrator.labels.show')">
+                                {{ __('Labels') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('pickups.show')" :active="request()->routeIs('pickups.show')">
+                                {{ __('Pickup') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('generate-api-token')"
+                                        :active="request()->routeIs('generate-api-token')"
+                                        onclick="event.preventDefault(); generateApiToken();">
+                                {{ __('Generate API Token') }}
+                            </x-nav-link>
+
+                        @endif
 
                     @endauth
                 </div>
@@ -130,3 +143,24 @@
         </div>
     </div>
 </nav>
+
+<script>
+    function generateApiToken() {
+        fetch('/generate-api-token', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin'
+        }).then(response => response.json())
+            .then(data => {
+                if (data.api_token) {
+                    alert('Generated API Token: ' + data.api_token);
+                } else {
+                    alert('Error generating API token.');
+                }
+            });
+    }
+</script>
