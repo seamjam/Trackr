@@ -13,7 +13,15 @@ class PickupRequest extends Model
     protected $fillable = [
         'date',
         'time',
-        'status'
+        'status',
+        'postal_code',
+        'house_number',
     ];
+
+    public function package()
+    {
+        return $this->hasOne(Package::class, 'pickupRequest_id');
+    }
+
 
 }

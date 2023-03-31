@@ -1,4 +1,6 @@
 <x-app-layout>
+    <x-session-alert/>
+
     <div class="bg-white p-4 rounded-lg" style="width: 500px; margin: 50px auto 0;">
         <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">Plan Pick up</h1>
 
@@ -8,21 +10,54 @@
             <div class="mb-4">
                 <label for="pickup_date" class="block mb-2">Pick up Date:</label>
                 <input type="date" id="pickup_date" name="pickup_date"
-                       class="border-gray-400 border-2 rounded-lg w-full" required>
+                       class="border-gray-400 border-2 rounded-lg w-full"
+                       min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}"
+                       value="{{ old('pickup_date') }}">
+                @error('pickup_date')
+                <div class="text-red-500 italic text-sm">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-4">
                 <label for="pickup_time" class="block mb-2">Pick up Time:</label>
                 <input type="time" id="pickup_time" name="pickup_time"
-                       class="border-gray-400 border-2 rounded-lg w-full" required>
+                       class="border-gray-400 border-2 rounded-lg w-full"
+                       value="{{ old('pickup_time') }}">
+                @error('pickup_time')
+                <div class="text-red-500 italic text-sm">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="postal_code" class="block mb-2">Postal Code:</label>
+                <input type="text" id="postal_code" name="postal_code"
+                       class="border-gray-400 border-2 rounded-lg w-full"
+                       value="{{ old('postal_code') }}">
+                @error('postal_code')
+                <div class="text-red-500 italic text-sm">{{ $message }}</div>
+                @enderror
+
+
+            </div>
+
+            <div class="mb-4">
+                <label for="house_number" class="block mb-2">House Number:</label>
+                <input type="number" id="house_number" name="house_number"
+                       class="border-gray-400 border-2 rounded-lg w-full"
+                       value="{{ old('house_number') }}">
+                @error('house_number')
+                <div class="text-red-500 italic text-sm">{{ $message }}</div>
+                @enderror
             </div>
 
             <input type="hidden" name="selectedPackages"
                    value="{{ implode(',', $selectedPackages->pluck('id')->toArray()) }}">
 
-            <button type="submit" class="border-gray-400 bg-black text-white font-bold py-2 px-4 rounded-lg">
-                Schedule Pick up
-            </button>
+            <div class="text-center">
+                <button type="submit" class="border-gray-400 bg-black text-white font-bold py-2 px-4 rounded-lg">
+                    Schedule Pick up
+                </button>
+            </div>
         </form>
     </div>
 </x-app-layout>

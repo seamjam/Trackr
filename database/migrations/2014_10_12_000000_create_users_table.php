@@ -79,7 +79,8 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->time('time');
-            $table->string('status')->default('gepland');
+            $table->string('postal_code');
+            $table->string('house_number');
             $table->timestamps();
         });
 
@@ -95,7 +96,7 @@ return new class extends Migration
             $table->unsignedBigInteger('post_company_id')->nullable();
             $table->foreign('post_company_id')->references('id')->on('post_companies')->nullabele();
             $table->unsignedBigInteger('review_id')->nullable();
-            $table->foreign('review_id')->references('id')->on('post_companies')->nullablele();
+            $table->foreign('review_id')->references('id')->on('reviews')->nullablele();
             $table->unsignedBigInteger('pickupRequest_id')->nullable();
             $table->foreign('pickupRequest_id')->references('id')->on('pickup_requests')->nullablele();
             $table->string('receiver_firstname')->nullable();

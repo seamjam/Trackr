@@ -1,8 +1,7 @@
-<!-- administrator.pickups.show -->
-
 <x-app-layout>
+    <x-session-alert/>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
 
@@ -12,20 +11,19 @@
     </div>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#calendar').fullCalendar({
-                events : [
-                        @foreach($packages as $package)
-                        @if($package->pickupRequest)
+                events: [
+                        @foreach($pickupRequests as $pickupRequest)
                     {
-                        title : '{{ $package->receiver_firstname }} {{ $package->receiver_lastname }}',
-                        start : '{{ $package->pickupRequest->date }}T{{ $package->pickupRequest->time }}',
-                        url : '{{ route('administrator.pickups.show', $package->id) }}'
+                        title: '-{{ $pickupRequest->postal_code }} {{ $pickupRequest->house_number }}',
+                        start: '{{ \Carbon\Carbon::parse($pickupRequest->date . ' ' . $pickupRequest->time)->toIso8601String() }}'
                     },
-                    @endif
                     @endforeach
-                ]
+                ],
+                timeFormat: 'H:mm'
             });
         });
     </script>
+
 </x-app-layout>
