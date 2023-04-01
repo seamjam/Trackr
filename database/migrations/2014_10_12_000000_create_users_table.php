@@ -14,17 +14,17 @@ return new class extends Migration
         //webshop aanmaken
         Schema::create('webshops', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('postcode');
-            $table->string('house_number');
+            $table->string('name')->fulltext();
+            $table->string('postcode')->fulltext();
+            $table->string('house_number')->fulltext();
             $table->timestamps();
         });
 
         //user table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name')->fulltext();
+            $table->string('email')->unique()->fulltext();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phonenumber')->nullable();
@@ -57,13 +57,13 @@ return new class extends Migration
         //package status
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->fulltext();;
             $table->timestamps();
         });
 
         Schema::create('post_companies', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->fulltext();;
             $table->timestamps();
         });
 
@@ -71,7 +71,7 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->integer('stars')->nullable();
-            $table->text('description');
+            $table->text('description')->fulltext();;
             $table->timestamps();
         });
 
@@ -90,7 +90,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('statuses');
-            $table->string('tracking_number')->unique();
+            $table->string('tracking_number')->unique()->fulltext();
             $table->unsignedBigInteger('webshop_id')->nullable();
             $table->foreign('webshop_id')->references('id')->on('webshops')->nullabele();
             $table->unsignedBigInteger('post_company_id')->nullable();
@@ -99,10 +99,10 @@ return new class extends Migration
             $table->foreign('review_id')->references('id')->on('reviews')->nullablele();
             $table->unsignedBigInteger('pickupRequest_id')->nullable();
             $table->foreign('pickupRequest_id')->references('id')->on('pickup_requests')->nullablele();
-            $table->string('receiver_firstname')->nullable();
-            $table->string('receiver_lastname')->nullable();
-            $table->string('receiver_postal_code')->nullable();
-            $table->string('receiver_house_number')->nullable();
+            $table->string('receiver_firstname')->nullable()->fulltext();;
+            $table->string('receiver_lastname')->nullable()->fulltext();;
+            $table->string('receiver_postal_code')->nullable()->fulltext();;
+            $table->string('receiver_house_number')->nullable()->fulltext();;
             $table->timestamps();
         });
 

@@ -63,6 +63,14 @@
                                 </x-nav-link>
                             @endif
 
+                            @if (auth()->user()->roles()->where('name', 'receiver_customer')->exists())
+                                <x-nav-link :href="route('customer.show')"
+                                            :active="request()->routeIs('customer.show')">
+                                    {{ __('Orders') }}
+                                </x-nav-link>
+
+                            @endif
+
 
                     @endauth
                 </div>

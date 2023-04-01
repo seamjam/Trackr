@@ -8,6 +8,7 @@ use App\Http\Controllers\LabelController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\PickupRequestController;
 use App\Http\Controllers\CourierController;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +76,14 @@ Route::middleware(['auth', 'role:administrator'])->group(function () {
 
 Route::middleware(['auth', 'role:courier'])->group(function () {
     Route::get('/registered/packages', [CourierController::class, 'show'])->name('courier.packages.show');;
+});
+
+//customer receiver
+
+Route::middleware(['auth', 'role:receiver_customer'])->group(function () {
+    Route::get('/orders', [CustomerController::class, 'show'])->name('customer.show');
+    Route::post('/review', [CustomerController::class, 'review'])->name('customer.review');
+    Route::get('/details/{package}', [CustomerController::class, 'details'])->name('customer.details');
 });
 
 
