@@ -17,6 +17,9 @@ class CustomerController extends Controller
         $statuses = Status::all();
         $selectedStatus = $request->input('status', '');
 
+        $column = $request->input('column', 'tracking_number'); // Default sorteer kolom
+        $order = $request->input('order', 'asc'); // Default sorteer volgorde
+
         $packages = Package::where('receiver_postal_code', $user->receiver_postal_code)
             ->where('receiver_house_number', $user->receiver_house_number);
 
@@ -36,7 +39,7 @@ class CustomerController extends Controller
                 ->select('packages.*');
         }
 
-        $packages = $packages->paginate(10);
+        $packages = $packages->orderBy($column, $order)->paginate(10);
 
         return view('customer.show', [
             'user' => $user,
@@ -45,6 +48,7 @@ class CustomerController extends Controller
             'selectedStatus' => $selectedStatus,
         ]);
     }
+
 
     public function details(Package $package)
     {
@@ -66,8 +70,10 @@ class CustomerController extends Controller
         $package->review_id = $new_review->id;
         $package->save();
 
+
         return redirect()->route('customer.show')->with('success', 'Thank you for your review.');
     }
+
 
 
 }

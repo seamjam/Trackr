@@ -1,0 +1,78 @@
+.wrapper {
+    width: 100%;
+    max-width: 844px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+.margin-area {
+    position: relative;
+    text-align: center;
+    font-family: "Trebuchet", sans-serif;
+    font-size: 14px;
+    margin: 0 20px;
+}
+
+.dot {
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    background: gray;
+    border-radius: 50%;
+    top: 10px;
+    color: white;
+    line-height: 30px;
+    z-index: 9999;
+}
+
+.dot-1 {
+    left: -3%;
+}
+
+.dot-2 {
+    left: 20%;
+}
+
+.dot-3 {
+    left: 40%;
+}
+
+.dot-4 {
+    left: 60%;
+}
+
+.dot-5 {
+    left: 80%;
+}
+
+.dot-6 {
+    left: 102%;
+}
+
+.progress-bar {
+    position: absolute;
+    height: 10px;
+    width: 30%;
+    top: 20px;
+    background: gray;
+}
+
+.progress-bar-1 {
+    left: 0%;
+}
+
+.progress-bar-2 {
+    left: 30%;
+}
+
+.progress-bar-3 {
+    left: 40%;
+}
+
+.progress-bar-4 {
+    left: 55%;
+}
+
+.progress-bar-5 {
+    left: 75%;
+}
