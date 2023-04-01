@@ -14,13 +14,7 @@
                 </div>
             </div>
         </form>
-
-        <form method="GET" action="{{ route('customer.show') }}">
-            <div class="">
-                <input type="text" name="search" class="border-gray-400 border-2 rounded-lg w-full mb-5"
-                       placeholder="Search webshop">
-            </div>
-        </form>
+        <x-search-bar :route="route('customer.show')" :placeholder="'search webshops'"/>
 
         @if ($packages->count() > 0)
             <x-table-orders-overview :packages="$packages"/>

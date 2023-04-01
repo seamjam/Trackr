@@ -9,6 +9,12 @@ class Post_company extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'id'
+    ];
+
+
 
     public function package()
     {

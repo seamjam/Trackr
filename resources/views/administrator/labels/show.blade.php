@@ -43,44 +43,38 @@
                 </div>
             </div>
 
+
             <form action="{{ route('administrator.labels.show') }}" method="get">
                 <div class="flex mb-4">
-                    <div class="mr-4">
-                        <select name="status" id="status">
-                            <option value="">All statuses</option>
-                            @foreach ($statuses as $status)
-                                <option
-                                    value="{{ $status->id }}" {{ $selectedStatus == $status->id ? 'selected' : '' }}>
-                                    {{ $status->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <x-filter-status-administrator :statuses="$statuses" :selectedStatus="$selectedStatus"/>
+
+                    <select name="is_sent"
+                            class="border-gray-400 border-2 text-black font-bold py-2 px-4 rounded-lg mr-2">
+                        <option value="" {{ $isSent === '' ? 'selected' : '' }}>All packages</option>
+                        <option value="1" {{ $isSent === '1' ? 'selected' : '' }}>Sent packages</option>
+                        <option value="0" {{ $isSent === '0' ? 'selected' : '' }}>Not sent packages</option>
+                    </select>
+
                     <button type="submit" class="border-gray-400 bg-black text-white font-bold py-2 px-4 rounded-lg">
                         Filter
                     </button>
                 </div>
             </form>
 
-            <form method="GET" action="{{ route('administrator.labels.show') }}">
-                <div class="">
-                    <input type="text" name="search" class="border-gray-400 border-2 rounded-lg w-full mb-3"
-                           placeholder="Search label">
+            <x-search-bar :route="route('customer.show')" :placeholder="'search delivery company'"/>
+
+
+            @if ($packages->count() > 0)
+                <x-table-label-overview :objects="$packages" :sort="$sort" :order="$order"/>
+
+                <div class="mt-5">
+                    {{ $packages->links() }}
                 </div>
-            </form>
+
+            @else
+                <p class="text-center mb-5 mt-5"><i>There are no registered packages</i></p>
+            @endif
         </div>
-
-        @if ($packages->count() > 0)
-            <x-table-label-overview :objects="$packages"/>
-
-            <div class="mt-5">
-                {{ $packages->links() }}
-            </div>
-
-        @else
-            <p class="text-center mb-5 mt-5"><i>There are no registered packages</i></p>
-        @endif
-
     </div>
 </x-app-layout>
 
@@ -105,6 +99,12 @@
         });
     });
 
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('plan-pickup-button').addEventListener('click', function () {
+            collectSelectedPackages();
+        });
+    });
+
     function collectSelectedPackages() {
         const selectedPackages = document.querySelectorAll('input[name="selectedObjects[]"]:checked');
         const selectedPackageIds = Array.from(selectedPackages).map(el => el.value);
@@ -112,13 +112,6 @@
 
         window.location.href = pickupUrl;
     }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('plan-pickup-button').addEventListener('click', function () {
-            collectSelectedPackages();
-        });
-    });
-
 </script>
 
 

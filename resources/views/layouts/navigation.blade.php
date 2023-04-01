@@ -36,12 +36,16 @@
                         @if (auth()->user()->roles()->where('name', 'administrator')->exists())
                             <x-nav-link :href="route('administrator.labels.show')"
                                         :active="request()->routeIs('administrator.labels.show')">
-                                {{ __('Labels') }}
+                                {{ __('Registered packages') }}
                             </x-nav-link>
 
                             <x-nav-link :href="route('administrator.pickups.show')" :active="request()->routeIs('administrator.pickups.show')">
                                 {{ __('Pickup') }}
                             </x-nav-link>
+
+                                <x-nav-link :href="route('administrator.reviews.show')" :active="request()->routeIs('administrator.reviews.show')">
+                                    {{ __('Reviews') }}
+                                </x-nav-link>
 
                             <x-nav-link :href="route('generate-api-token')"
                                         :active="request()->routeIs('generate-api-token')"

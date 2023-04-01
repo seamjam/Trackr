@@ -4,11 +4,12 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use \App\Http\Controllers\WebshopController;
-use App\Http\Controllers\LabelController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\PickupRequestController;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,36 +57,40 @@ Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('webshop
 Route::get('/user/{user}', [UserController::class, 'edit'])->name('webshop.user.edit');
 Route::put('/user/{user}', [UserController::class, 'update'])->name('webshop.user.update');
 
-//administrator
-//label
-Route::get('/labels', [LabelController::class, 'show'])->name('administrator.labels.show');
-Route::get('/label/create', [LabelController::class, 'create'])->name('administrator.labels.create');
-Route::post('/label/create', [LabelController::class,'store'])->name('administrator.labels.store');
-Route::delete('/label/{label}', [LabelController::class, 'destroy'])->name('administrator.labels.destroy');
-Route::get('/label/{label}', [LabelController::class, 'edit'])->name('administrator.labels.edit');
-Route::put('/label/{label}', [LabelController::class, 'update'])->name('administrator.labels.update');
-Route::post('/pdf', [LabelController::class, 'generatePDF'])->name('administrator.labels.PDF');
-Route::post('/csv', [LabelController::class,'importCSV'])->name('administrator.labels.importCSV');
 
-//pickups
+
+
 Route::middleware(['auth', 'role:administrator'])->group(function () {
+
+    //packaging
+    Route::get('/labels', [PackageController::class, 'show'])->name('administrator.labels.show');
+    Route::get('/label/create', [PackageController::class, 'create'])->name('administrator.labels.create');
+    Route::post('/label/create', [PackageController::class,'store'])->name('administrator.labels.store');
+    Route::delete('/label/{label}', [PackageController::class, 'destroy'])->name('administrator.labels.destroy');
+    Route::get('/label/{label}', [PackageController::class, 'edit'])->name('administrator.labels.edit');
+    Route::put('/label/{label}', [PackageController::class, 'update'])->name('administrator.labels.update');
+    Route::post('/pdf', [PackageController::class, 'generatePDF'])->name('administrator.labels.PDF');
+    Route::post('/csv', [PackageController::class,'importCSV'])->name('administrator.labels.importCSV');
+
+    //pickups
     Route::get('/pickups', [PickupRequestController::class, 'show'])->name('administrator.pickups.show');
     Route::post('/pickups', [PickupRequestController::class, 'store'])->name('administrator.pickups.store');
     Route::get('/pickups/create', [PickupRequestController::class, 'create'])->name('administrator.pickups.create');
+
+    //reviews
+    Route::get('/reviews', [ReviewController::class,'show'])->name('administrator.reviews.show');
 });
 
 Route::middleware(['auth', 'role:courier'])->group(function () {
     Route::get('/registered/packages', [CourierController::class, 'show'])->name('courier.packages.show');;
 });
 
-//customer receiver
 
 Route::middleware(['auth', 'role:receiver_customer'])->group(function () {
     Route::get('/orders', [CustomerController::class, 'show'])->name('customer.show');
     Route::post('/review', [CustomerController::class, 'review'])->name('customer.review');
     Route::get('/details/{package}', [CustomerController::class, 'details'])->name('customer.details');
 });
-
 
 //authentication
 Route::get('/generate-api-token', [ApiController::class, 'generateApiToken'])->name('generate-api-token')->middleware(['auth', 'role:administrator']);

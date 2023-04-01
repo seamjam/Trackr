@@ -2,7 +2,7 @@
     <script src="{{ asset('/js/label.create.js') }}" defer></script>
 
     <div class="bg-white p-4 rounded-lg" style="max-width: 1100px; margin: 50px auto 0;">
-        <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">Create new label</h1>
+        <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">Register new package(s)</h1>
 
         <form id="myForm" method="POST" action="{{ route('administrator.labels.store') }}">
             @csrf
@@ -11,7 +11,8 @@
                 <x-input-form-label label="Amount" type="number" placeholder="label amount" id="label_count"/>
                 <div class="mb-4" style="flex:1;">
                     <label for="Delivery Company" class="block text-gray-700 font-bold mb-2">Delivery Company</label>
-                    <select name="post_company_id" id="post_company" class="border-gray-300 rounded-lg px-4 py-2 w-full">
+                    <select name="post_company_id" id="post_company"
+                            class="border-gray-300 rounded-lg px-4 py-2 w-full">
                         @foreach($post_companies as $post_company)
                             <option value="{{ $post_company->name }}">{{ $post_company->name }}</option>
                         @endforeach
@@ -24,7 +25,7 @@
                                     id="receiver_first_name"/>
                 <x-input-form-label label="Last Name" type="text" placeholder="Receiver last name"
                                     id="receiver_last_name"/>
-                    <button type="button" onclick="addLabel()" class="text-black  px-0.5 rounded pt-3 pl-3"> Add </button>
+                <button type="button" onclick="addLabel()" class="text-black  px-0.5 rounded pt-3 pl-3"> Add</button>
             </div>
 
             <div style="border: 1px solid black; height: 250px; overflow-y: auto;">

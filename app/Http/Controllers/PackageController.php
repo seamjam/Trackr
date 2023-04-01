@@ -11,32 +11,63 @@ use League\Csv\Reader;
 use Picqer\Barcode\BarcodeGeneratorHTML;
 
 
-class LabelController extends Controller
+class PackageController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth', 'role:administrator']);
-    }
-
     public function show(Request $request)
     {
         $webshopId = auth()->user()->webshop_id;
         $statuses = Status::all();
 
         $selectedStatus = $request->input('status', '');
+        $isSent = $request->input('is_sent', '');
+        $search = $request->input('search', '');
+        $sort = $request->input('sort', 'tracking_number');
+        $order = $request->input('order', 'asc');
+
+        $packages = Package::where('webshop_id', $webshopId);
 
         if ($selectedStatus) {
-            $packages = Package::where('webshop_id', $webshopId)
-                ->where('status_id', $selectedStatus)
-                ->paginate(10);
-        } else {
-            $packages = Package::where('webshop_id', $webshopId)->paginate(10);
+            $packages = $packages->where('status_id', $selectedStatus);
         }
+
+        if ($isSent !== '') {
+            $packages = $isSent == '1' ? $packages->whereNotNull('pickupRequest_id') : $packages->whereNull('pickupRequest_id');
+        }
+
+        if ($search) {
+            $packages = $packages->where(function ($query) use ($search) {
+                $query->whereRaw("MATCH (tracking_number) AGAINST (? IN BOOLEAN MODE)", $search)
+                    ->orWhereHas('post_company', function ($query) use ($search) {
+                        $query->whereRaw("MATCH (name) AGAINST (? IN BOOLEAN MODE)", $search);
+                    });
+            });
+        }
+
+        if ($sort === 'post_company_name') {
+            $packages = $packages->leftJoin('post_companies', 'packages.post_company_id', '=', 'post_companies.id')
+                ->orderBy('post_companies.name', $order)
+                ->select('packages.*');
+        } else {
+            $packages = $packages->orderBy($sort, $order);
+        }
+
+        $packages = $packages->paginate(10);
 
         return view('administrator.labels.show', [
             'packages' => $packages,
             'statuses' => $statuses,
             'selectedStatus' => $selectedStatus,
+            'isSent' => $isSent,
+            'sort' => $sort,
+            'order' => $order,
+        ]);
+    }
+
+    public function create()
+    {
+        $postCompanies = Post_company::all();
+        return view('administrator.labels.create', [
+            'post_companies' => $postCompanies,
         ]);
     }
 
@@ -47,7 +78,6 @@ class LabelController extends Controller
         foreach ($labels as $label) {
             $trackingNumber = 'TN-' . uniqid();
             $post_company = Post_company::where('name', $label['post_company'])->first();
-
 
             $newLabel = new Package;
             $newLabel->status_id = 1;
@@ -61,15 +91,6 @@ class LabelController extends Controller
             $newLabel->save();
         }
         return redirect()->route('administrator.labels.show')->with('success', 'The labels have been created successfully!');
-    }
-
-    public function create()
-    {
-        $postCompanies = Post_company::all();
-
-        return view('administrator.labels.create', [
-            'post_companies' => $postCompanies,
-        ]);
     }
 
     public function generatePDF(Request $request)
@@ -120,23 +141,25 @@ class LabelController extends Controller
                 $cleanedRecord[$cleanedKey] = $cleanedValue;
             }
 
-            try {
-                Package::create([
-                    'status_id' => 1,
-                    'tracking_number' => 'TN-' . uniqid(),
-                    'webshop_id' => auth()->user()->webshop_id,
-                    'post_company_id' => $cleanedRecord['post_company_id'],
-                    'receiver_firstname' => $cleanedRecord['receiver_firstname'],
-                    'receiver_lastname' => $cleanedRecord['receiver_lastname'],
-                    'receiver_postal_code' => $cleanedRecord['receiver_postal_code'],
-                    'receiver_house_number' => $cleanedRecord['receiver_house_number']
-                ]);
-            } catch (\Exception $e) {
-                return redirect()->route('administrator.labels.show')->with('error', 'Labels were not noted correctly!');
+            $post_company = Post_company::where('name', $cleanedRecord['post_company'])->first();
+
+            if ($post_company) {
+                $post_company_id = $post_company->id;
+            } else {
+                return redirect()->route('administrator.labels.show')->with('error', 'Registered packages where formated incorrectly.');
             }
+
+            $package = new Package;
+            $package->status_id = 1;
+            $package->tracking_number = 'TN-' . uniqid();
+            $package->webshop_id = auth()->user()->webshop_id;
+            $package->post_company_id = $post_company_id;
+            $package->receiver_firstname = $cleanedRecord['receiver_firstname'];
+            $package->receiver_lastname = $cleanedRecord['receiver_lastname'];
+            $package->receiver_postal_code = $cleanedRecord['receiver_postal_code'];
+            $package->receiver_house_number = $cleanedRecord['receiver_house_number'];
+            $package->save();
         }
-
-        return redirect()->route('administrator.labels.show')->with('success', 'Labels imported successfully');
+        return redirect()->route('administrator.labels.show')->with('success', 'Packages have been imported successfully!');
     }
-
 }
