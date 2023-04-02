@@ -14,7 +14,7 @@ class PickupDateRule implements Rule
         $diffInDays = $now->diffInDays($pickupDateTime, false);
         $currentHour = $now->hour;
 
-        return ($diffInDays >= 1 && $currentHour < 15);
+        return ($diffInDays >= 2 ||$diffInDays >= 1 && $currentHour < 15);
     }
 
     public function message()

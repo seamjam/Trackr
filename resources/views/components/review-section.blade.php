@@ -6,7 +6,7 @@
 
         <div class="mb-3">
             <label for="rating" class="block text-gray-700 text-sm font-medium mb-2">{{__('titles.amount_stars')}}:</label>
-            <select name="rating" id="rating" class="form-select block w-full mt-1 text-sm rounded-md">
+            <select name="rating" id="rating" class="form-select block w-full mt-1 text-sm rounded-md" required>
                 <option value="">{{__('titles.amount_stars')}}</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -14,13 +14,20 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
             </select>
+            @error('rating')
+            <div class="text-red-500 italic text-sm">{{ $message }}</div>
+            @enderror
         </div>
         <div class="mb-3">
             <label for="review" class="block text-gray-700 text-sm font-medium mb-2">{{__('titles.review')}}:</label>
             <textarea name="review" id="review" rows="4"
-                      class="form-textarea block w-full mt-1 text-sm rounded-md"></textarea>
+                      class="form-textarea block w-full mt-1 text-sm rounded-md" required></textarea>
         </div>
         <button type="submit" class="bg-black text-white font-bold py-2 px-4 rounded-lg mr-2 mt-4">{{__('titles.send_review')}}
         </button>
     </form>
+
+    @error('review')
+    <div class="text-red-500 italic text-sm">{{ $message }}</div>
+    @enderror
 </div>

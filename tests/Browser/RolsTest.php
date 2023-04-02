@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
-class AuthenticationTest extends DuskTestCase
+class RolsTest extends DuskTestCase
 {
 
 
@@ -54,13 +54,10 @@ class AuthenticationTest extends DuskTestCase
                 ->clicklink('Language')
                 ->assertPathIs('/lang/change')
                 ->select('locale', 'nl')
-                ->clicklink('Trackr webwinkels');
-//                ->click('@user-name-button'); // Gebruik click() in plaats van script()
-//                ->click('@logout-link') // Gebruik click() met het dusk-attribuut
-//                ->assertGuest();
+                ->clicklink('Trackr webwinkels')
+                ->logout();
         });
     }
-
 
     /**
      * @test
@@ -90,6 +87,53 @@ class AuthenticationTest extends DuskTestCase
                 ->press('Delete')
                 ->press('Create Label')
                 ->assertPathIs('/labels')
+                ->press('Plan Pickup')
+                ->assertPathIs('/labels')
+                ->select('status', 'delivered')
+                ->press('Filter')
+                ->assertSee('Upload CSV')
+                ->check('input[name="selectedObjects[]"][value="1"]')
+                ->press('Plan Pickup')
+                ->type('pickup_date', '2023-04-26')
+                ->type('pickup_time', '18:00')
+                ->type('postal_code', '3987DB')
+                ->type('house_number', '50')
+                ->press('Schedule Pick up')
+                ->assertPathIs('/pickups')
+                ->logout();
         });
     }
+
+//    /**
+//     * @test
+//     */
+    public function customer_set_review(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/register')
+                ->assertSee('Name')
+                ->assertSee('Email')
+                ->assertSee('Password')
+                ->type('name', 'Henook Jamaladin')
+                ->type('email', 'henook@outlook.com')
+                ->type('password', 'password')
+                ->type('password_confirmation', 'password')
+                ->type('postal_code', '3987DB')
+                ->type('house_number', '50')
+                ->press('REGISTER')
+                ->assertPathIs('/dashboard')
+                ->assertAuthenticated()
+                ->clicklink('Order');
+
+
+            $browser->visit('/details/2')
+                ->select('rating', '3')
+                ->type('review', 'Very fast delivery!')
+                ->press('Send review')
+                ->assertPathIs('/orders')
+                ->logout();
+        });
+    }
+
+
 }

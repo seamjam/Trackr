@@ -13,11 +13,19 @@
     <tbody>
     @foreach($packages as $package)
         <tr>
-            <td class="p-2 border-t text-center"><a
-                    href="{{ route('customer.details', ['package' => $package->id]) }}">{{ $package->id }}</a></td>
-            <td class="p-2 border-t text-center"><a
-                    href="{{ route('customer.details', ['package' => $package->id]) }}">{{ $package->webshop->name }}</a>
+        <tr>
+
+
+            <td class="p-2 border-t text-center" name="orderdetails">
+                <a  href="{{ route('customer.details', ['package' => $package->id]) }}">
+                    {{ $package->id }}
+                </a>
             </td>
+            <td class="p-2 border-t text-center" name="orderdetails">
+                <a href="{{ route('customer.details', ['package' => $package->id]) }}">
+                    {{ $package->webshop->name }}
+                </a> </td>
+
 
         </tr>
     @endforeach

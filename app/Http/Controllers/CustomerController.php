@@ -56,6 +56,14 @@ class CustomerController extends Controller
     }
 
     public function review(Request $request){
+
+        $validatedData = $request->validate([
+            'package_id' => 'required|integer',
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'required|string',
+        ]);
+
+
         $package_id = $request->input('package_id');
         $rating = $request->input('rating');
         $review = $request->input('review');

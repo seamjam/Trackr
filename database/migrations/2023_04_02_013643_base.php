@@ -102,8 +102,8 @@ return new class extends Migration
             $table->foreign('post_company_id')->references('id')->on('post_companies')->nullable();
             $table->unsignedBigInteger('review_id')->nullable();
             $table->foreign('review_id')->references('id')->on('reviews')->nullable();
-            $table->unsignedBigInteger('pickup_request_id')->nullable();
-            $table->foreign('pickup_request_id')->references('id')->on('pickup_requests')->nullable();
+            $table->unsignedBigInteger('pickupRequest_id')->nullable();
+            $table->foreign('pickupRequest_id')->references('id')->on('pickup_requests')->nullable();
             $table->string('receiver_firstname')->nullable();
             $table->string('receiver_lastname')->nullable();
             $table->string('receiver_postal_code')->nullable();
