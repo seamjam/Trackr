@@ -9,7 +9,7 @@
         <thead>
         <tr>
             <th class="w-1/6 text-left">
-                <a href="{{ route('superadmin.webshop.show', ['sort' => 'webshop_name', 'direction' => $direction]) }}">{{__('titles.websop_name')}}</a>
+                <a href="{{ route('superadmin.webshop.show', ['sort' => 'webshop_name', 'direction' => $direction]) }}">{{__('titles.webshop_name')}}</a>
             </th>
             <th class="w-1/6 text-left">
                 <a href="{{ route('superadmin.webshop.show', ['sort' => 'owner_name', 'direction' => $direction]) }}">{{__('titles.admin_name')}}</a>
@@ -62,10 +62,11 @@
             </div>
 
             <div class="modal-body">
-                <p>{{__('titles.webshop_name')}}: <span id="user-webshop-name"></span></p>
-                <p>{{__('titles.admin_name')}}: <span id="user-name"></span></p>
-                <p>{{__('titles.email')}}: <span id="user-email"></span></p>
-                <p>{{__('titles.phonenumber')}}: <span id="user-phone"></span></p>
+                <p>Webshop name: <span id="user-webshop-name"></span></p>
+                <p>Owner name: <span id="user-name"></span></p>
+                <p>Email: <span id="user-email"></span></p>
+                <p>Phone number: <span id="user-phone"></span></p>
+                <p>Webshop address: <span id="user-webshop-address"></span></p>
             </div>
         </div>
     </div>

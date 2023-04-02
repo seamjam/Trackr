@@ -12,7 +12,7 @@
 
             <div class="mb-4">
                 <label for="Delivery company's name"
-                       class="block text-gray-700 font-bold mb-2">{{__('titles.delivery-company_name')}}</label>
+                       class="block text-gray-700 font-bold mb-2">{{__('titles.delivery_company_name')}}</label>
                 <input type="text" name="delivercompany_name" id="delivercompany_name"
                        class="w-full border-gray-300 rounded-lg px-4 py-2 {{ $errors->has('delivercompany_name') ? 'border-red-500' : '' }}">
                 <x-error-message :error="'delivercompany_name'"/>
