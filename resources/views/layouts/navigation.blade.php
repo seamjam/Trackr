@@ -13,70 +13,87 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
 
-
                     @auth
                         @if (auth()->user()->roles()->where('name', 'superadmin')->exists())
-                            <x-nav-link :href="route('user.show.blade.php')" :active="request()->routeIs('superadmin.user.show.blade.php')">
-                                {{ __('Trackr users') }}
+                            <x-nav-link :href="route('superadmin.user.show')"
+                                        :active="request()->routeIs('superadmin.user.show')">
+                                {{ __('titles.Trackr_users') }}
                             </x-nav-link>
 
-                            <x-nav-link :href="route('webshop.show.blade.php')"
-                                        :active="request()->routeIs('superadmin.webshop.show.blade.php')">
-                                {{ __('Trackr webshops') }}
+                            <x-nav-link :href="route('superadmin.webshop.show')"
+                                        :active="request()->routeIs('superadmin.webshop.show')">
+                                {{ __('titles.Trackr_webshops') }}
                             </x-nav-link>
+
                         @endif
 
                         @if (auth()->user()->roles()->where('name', 'webshop')->exists())
-                            <x-nav-link :href="route('webshop.user.show.blade.php')"
-                                        :active="request()->routeIs('superadmin.user.show.blade.php')">
-                                {{ __('Webshop employees') }}
+                            <x-nav-link :href="route('webshop.user.show')"
+                                        :active="request()->routeIs('superadmin.user.show')">
+                                {{ __('titles.Employees') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('webshop.reviews.show')"
+                                        :active="request()->routeIs('webshop.reviews.show')">
+                                {{ __('titles.Reviews') }}
                             </x-nav-link>
                         @endif
 
                         @if (auth()->user()->roles()->where('name', 'administrator')->exists())
                             <x-nav-link :href="route('administrator.labels.show')"
                                         :active="request()->routeIs('administrator.labels.show')">
-                                {{ __('Registered packages') }}
+                                {{ __('titles.package_overview') }}
                             </x-nav-link>
 
-                            <x-nav-link :href="route('administrator.pickups.show')" :active="request()->routeIs('administrator.pickups.show')">
-                                {{ __('Pickup') }}
+                            <x-nav-link :href="route('administrator.pickups.show')"
+                                        :active="request()->routeIs('administrator.pickups.show')">
+                                {{ __('titles.Pickup') }}
                             </x-nav-link>
-
-                                <x-nav-link :href="route('administrator.reviews.show')" :active="request()->routeIs('administrator.reviews.show')">
-                                    {{ __('Reviews') }}
-                                </x-nav-link>
 
                             <x-nav-link :href="route('generate-api-token')"
                                         :active="request()->routeIs('generate-api-token')"
                                         onclick="event.preventDefault(); generateApiToken();">
-                                {{ __('Generate API Token') }}
+                                {{ __('titles.Generate_token') }}
                             </x-nav-link>
                         @endif
 
-                            @if (auth()->user()->roles()->where('name', 'courier')->exists())
-                                <x-nav-link :href="route('courier.packages.show')"
-                                            :active="request()->routeIs('courier.packages.show')">
-                                    {{ __('Registered Packages') }}
-                                </x-nav-link>
+                        @if (auth()->user()->roles()->where('name', 'packer')->exists())
+                            <x-nav-link :href="route('packer.packages.read')"
+                                        :active="request()->routeIs('packer.packages.read')">
+                                {{ __('titles.package_overview') }}
+                            </x-nav-link>
+                        @endif
 
-                                <x-nav-link :href="route('generate-api-token-courier')"
-                                            :active="request()->routeIs('generate-api-token-courier')"
-                                            onclick="event.preventDefault(); generateApiTokenCourier();">
-                                    {{ __('Generate API Token') }}
-                                </x-nav-link>
-                            @endif
 
-                            @if (auth()->user()->roles()->where('name', 'receiver_customer')->exists())
-                                <x-nav-link :href="route('customer.show')"
-                                            :active="request()->routeIs('customer.show')">
-                                    {{ __('Orders') }}
-                                </x-nav-link>
+                        @if (auth()->user()->roles()->where('name', 'courier')->exists())
+                            <x-nav-link :href="route('courier.packages.show')"
+                                        :active="request()->routeIs('courier.packages.show')">
+                                {{ __('titles.package_overview') }}
+                            </x-nav-link>
 
-                            @endif
+                            <x-nav-link :href="route('generate-api-token-courier')"
+                                        :active="request()->routeIs('generate-api-token-courier')"
+                                        onclick="event.preventDefault(); generateApiTokenCourier();">
+                                {{ __('titles.Generate_token') }}
+                            </x-nav-link>
+                        @endif
 
+                        @if (auth()->user()->roles()->where('name', 'receiver_customer')->exists())
+                            <x-nav-link :href="route('customer.show')"
+                                        :active="request()->routeIs('customer.show')">
+                                {{ __('titles.Orders') }}
+                            </x-nav-link>
+
+                        @endif
+
+                        <x-nav-link :href="route('lang.index')"
+                                    :active="request()->routeIs('lang.index')">
+                            {{ __('titles.Language') }}
+                        </x-nav-link>
 
                     @endauth
+
+
                 </div>
             </div>
 
@@ -100,7 +117,7 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit.blade.php')">
+                        <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
@@ -111,7 +128,7 @@
                             <x-dropdown-link :href="route('logout')"
                                              onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('titles.Log_out') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -150,7 +167,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit.blade.php')">
+                <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 

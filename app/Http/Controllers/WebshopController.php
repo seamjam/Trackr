@@ -10,36 +10,48 @@ use Illuminate\Support\Facades\Hash;
 
 class WebshopController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware(['role:superadmin']);
-    }
-
     public function webshopsShow(Request $request)
     {
+        $sort = $request->get('sort', 'webshop_name');
+        $direction = $request->get('direction', 'asc');
+        $nextDirection = $direction === 'asc' ? 'desc' : 'asc';
+        $search = $request->get('search', '');
+
         $query = User::whereHas('roles', function ($query) {
             $query->where('id', 2);
         })->where('is_admin', true);
 
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                    ->orWhere('email', 'like', "%$search%");
+        if (!empty($search)) {
+            $searchTerms = explode(' ', $search);
+            $searchSql = implode('* ', $searchTerms) . '*';
+
+            $query->where(function ($query) use ($searchSql) {
+                $query->whereRaw("MATCH (name, email) AGAINST (? IN BOOLEAN MODE)", $searchSql)
+                    ->orWhereHas('webshop', function ($query) use ($searchSql) {
+                        $query->whereRaw("MATCH (name) AGAINST (? IN BOOLEAN MODE)", $searchSql);
+                    });
             });
         }
-//
-//        if ($request->has('search')) {
-//            $search = $request->input('search');
-//            $query->whereRaw("MATCH(name, email) AGAINST(? IN BOOLEAN MODE)", ["*$search*"]);
-//        }
+        switch ($sort) {
+            case 'webshop_name':
+                $query->with(['webshop' => function ($query) use ($direction) {
+                    $query->orderBy('name', $direction);
+                }]);
+                break;
+            case 'owner_name':
+                $query->orderBy('name', $direction);
+                break;
+            case 'email':
+                $query->orderBy('email', $direction);
+                break;
+            case 'phone_number':
+                $query->orderBy('phonenumber', $direction);
+                break;
+        }
+        $webshopUsers = $query->paginate(10);
 
-        $webshopUsers = $query->with('webshop')->paginate(10);
-
-        return view('superadmin.webshop.show.blade.php', ['users' => $webshopUsers]);
+        return view('superadmin.webshop.show', ['users' => $webshopUsers, 'direction' => $nextDirection]);
     }
-
 
     public function create()
     {
@@ -52,7 +64,6 @@ class WebshopController extends Controller
         return view('superadmin.webshop.edit', ['user' => $user]);
     }
 
-
     public function store(Request $request)
     {
         $validatedUserData = $request->validate([
@@ -63,14 +74,10 @@ class WebshopController extends Controller
 
         $validatedWebshopData = $request->validate([
             'webshop_name' => 'required|string|max:255',
-            'postcode' => 'required|string|max:10',
-            'house_number' => 'required|string|max:10',
         ]);
 
         $webshop = new Webshop();
         $webshop->name = $validatedWebshopData['webshop_name'];
-        $webshop->postcode = $validatedWebshopData['postcode'];
-        $webshop->house_number = $validatedWebshopData['house_number'];
         $webshop->save();
 
         $role = Role::find(2);
@@ -85,7 +92,7 @@ class WebshopController extends Controller
         $user->save();
         $user->roles()->attach($role);
 
-        return redirect()->route('webshop.show.blade.php')->with('success', 'User and Webshop are succesfully created')->with('successDuration', 5);
+        return redirect()->route('superadmin.webshop.show')->with('success', 'User and Webshop are succesfully created')->with('successDuration', 5);
     }
 
     public function update(Request $request, $id)
@@ -98,8 +105,6 @@ class WebshopController extends Controller
 
         $validatedWebshopData = $request->validate([
             'webshop_name' => 'required|string|max:255',
-            'postcode' => 'required|string|max:10',
-            'house_number' => 'required|string|max:10',
         ]);
 
         $user = User::findOrFail($id);
@@ -110,11 +115,9 @@ class WebshopController extends Controller
 
         $webshop = Webshop::findOrFail($user->webshop_id);
         $webshop->name = $validatedWebshopData['webshop_name'];
-        $webshop->postcode = $validatedWebshopData['postcode'];
-        $webshop->house_number = $validatedWebshopData['house_number'];
         $webshop->save();
 
-        return redirect()->route('webshop.show.blade.php')->with('success', 'User and Webshop are succesfully updated')->with('successDuration', 5);
+        return redirect()->route('superadmin.webshop.show')->with('success', 'User and Webshop are succesfully updated')->with('successDuration', 5);
     }
 
 

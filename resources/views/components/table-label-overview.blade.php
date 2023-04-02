@@ -9,15 +9,15 @@
         <thead>
         <tr>
             <th class="w-1/6 text-left">
-                <a href="{{ request()->fullUrlWithQuery(['sort' => 'tracking_number', 'order' => $newOrder]) }}">Tracking number</a>
+                <a href="{{ request()->fullUrlWithQuery(['sort' => 'tracking_number', 'order' => $newOrder]) }}"> {{__('titles.tracking_number')}}</a>
             </th>
             <th class="w-1/6 text-left">
-                <a href="{{ request()->fullUrlWithQuery(['sort' => 'status_id', 'order' => $newOrder]) }}">Status</a>
+                <a href="{{ request()->fullUrlWithQuery(['sort' => 'status_id', 'order' => $newOrder]) }}"> {{__('titles.status')}}</a>
             </th>
             <th class="w-1/6 text-left">
-                <a href="{{ request()->fullUrlWithQuery(['sort' => 'post_company_name', 'order' => $newOrder]) }}">Delivery company</a>
+                <a href="{{ request()->fullUrlWithQuery(['sort' => 'post_company_name', 'order' => $newOrder]) }}"> {{__('titles.delivery_company')}}</a>
             </th>
-            <th class="w-1/6 text-left pl-9">Select</th>
+            <th class="w-1/6 text-left pl-9"> {{__('titles.select')}}</th>
         </tr>
         </thead>
         <tbody class="h-40 overflow-y-scroll">

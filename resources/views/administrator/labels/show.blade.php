@@ -5,7 +5,7 @@
 
     <div class="bg-white p-4 rounded-lg" style="width: 1400px; margin: 50px auto 0;">
 
-        <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">Registered packages</h1>
+        <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">{{__('titles.package_overview')}}</h1>
         <div class="row">
             <div class="mb-3 float-right">
                 <div class="flex">
@@ -32,13 +32,13 @@
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <button type="submit" id="create-pdf-button"
                                 class="border-gray-400 bg-black border-2 text-white rounded-lg font-bold py-2 px-4 rounded-lg mr-2 mb-5">
-                            Create label(s)
+                            {{__('titles.create_label')}}
                         </button>
                     </form>
 
                     <a href="{{ route('administrator.labels.create') }}"
                        class="border-gray-400 bg-black border-2  text-white rounded-lg font-bold py-2 px-4 rounded-lg mb-5">
-                        Register package(s)
+                        {{__('titles.register_package')}}
                     </a>
                 </div>
             </div>
@@ -50,9 +50,11 @@
 
                     <select name="is_sent"
                             class="border-gray-400 border-2 text-black font-bold py-2 px-4 rounded-lg mr-2">
-                        <option value="" {{ $isSent === '' ? 'selected' : '' }}>All packages</option>
-                        <option value="1" {{ $isSent === '1' ? 'selected' : '' }}>Sent packages</option>
-                        <option value="0" {{ $isSent === '0' ? 'selected' : '' }}>Not sent packages</option>
+                        <option value="" {{ $isSent === '' ? 'selected' : '' }}>{{__('titles.all_packages')}}</option>
+                        <option
+                            value="1" {{ $isSent === '1' ? 'selected' : '' }}>{{__('titles.sent_packages')}}</option>
+                        <option
+                            value="0" {{ $isSent === '0' ? 'selected' : '' }}>{{__('titles.not_sent_packages')}}</option>
                     </select>
 
                     <button type="submit" class="border-gray-400 bg-black text-white font-bold py-2 px-4 rounded-lg">
@@ -60,24 +62,19 @@
                     </button>
                 </div>
             </form>
-
-            <x-search-bar :route="route('customer.show')" :placeholder="'search delivery company'"/>
+            <x-search-bar :route="route('administrator.labels.show')" :placeholder="__('titles.search_company')"/>
 
 
             @if ($packages->count() > 0)
                 <x-table-label-overview :objects="$packages" :sort="$sort" :order="$order"/>
 
-                <div class="mt-5">
-                    {{ $packages->links() }}
-                </div>
-
+                <x-pagination-link :objects="$packages"/>
             @else
-                <p class="text-center mb-5 mt-5"><i>There are no registered packages</i></p>
+                <p class="text-center mb-5 mt-5"><i>{{__('messages.empty_packages')}}</i></p>
             @endif
         </div>
     </div>
 </x-app-layout>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

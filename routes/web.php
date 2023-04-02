@@ -10,6 +10,8 @@ use App\Http\Controllers\PickupRequestController;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\DeliveryCompanyController;
+use App\Http\Controllers\LangController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,55 +33,60 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit.blade.php');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//superadmin
-Route::get('/superadmin', [UserController::class, 'index'])->name('superadmin.index');
-Route::get('/users', [UserController::class, 'usersShow'])->name('user.show.blade.php');
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
 
-//superadmin
-//webshop
-Route::get('/webshops', [WebshopController::class, 'webshopsShow'])->name('webshop.show.blade.php');
-Route::get('/webshop/create', [WebshopController::class, 'create'])->name('webshop.create');
-Route::get('/webshop/{user}', [WebshopController::class, 'edit'])->name('webshop.edit');
-Route::put('/webshop/{user}', [WebshopController::class, 'update'])->name('webshop.update');
-Route::post('/webshop/create', [WebshopController::class, 'store'])->name('webshop.store');
+    Route::get('/users', [UserController::class, 'superAdminUsersShow'])->name('superadmin.user.show');
 
-//webshop
-//user
-Route::get('/employees', [UserController::class, 'webshopUserShow'])->name('webshop.user.show.blade.php');
-Route::get('/user/create', [UserController::class, 'create'])->name('webshop.user.create');
-Route::post('/user/create', [UserController::class, 'store'])->name('webshop.user.store');
-Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('webshop.user.destroy');
-Route::get('/user/{user}', [UserController::class, 'edit'])->name('webshop.user.edit');
-Route::put('/user/{user}', [UserController::class, 'update'])->name('webshop.user.update');
+    Route::get('/webshops', [WebshopController::class, 'webshopsShow'])->name('superadmin.webshop.show');
+    Route::get('/webshop/create', [WebshopController::class, 'create'])->name('superadmin.webshop.create');
+    Route::get('/webshop/{user}', [WebshopController::class, 'edit'])->name('superadmin.webshop.edit');
+    Route::put('/webshop/{user}', [WebshopController::class, 'update'])->name('superadmin.webshop.update');
+    Route::post('/webshop/create', [WebshopController::class, 'store'])->name('superadmin.webshop.store');
 
+    Route::get('/deliveryCompany/create', [UserController::class, 'deliveryCompanyUserCreate'])->name('superadmin.delivery.create');
+    Route::post('/deliveryCompany/create', [UserController::class, 'deliveryCompanyUserStore'])->name('superadmin.delivery.store');
+});
 
+Route::middleware(['auth', 'role:webshop'])->group(function () {
+    Route::get('/employees', [UserController::class, 'employeesShow'])->name('webshop.user.show');
+    Route::get('/user/create', [UserController::class, 'create'])->name('webshop.user.create');
+    Route::post('/user/create', [UserController::class, 'store'])->name('webshop.user.store');
+    Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('webshop.user.destroy');
+    Route::get('/user/{user}', [UserController::class, 'edit'])->name('webshop.user.edit');
+    Route::put('/user/{user}', [UserController::class, 'update'])->name('webshop.user.update');
 
+    //reviews
+    Route::get('/reviews', [ReviewController::class, 'show'])->name('webshop.reviews.show');
+});
 
 Route::middleware(['auth', 'role:administrator'])->group(function () {
 
     //packaging
     Route::get('/labels', [PackageController::class, 'show'])->name('administrator.labels.show');
     Route::get('/label/create', [PackageController::class, 'create'])->name('administrator.labels.create');
-    Route::post('/label/create', [PackageController::class,'store'])->name('administrator.labels.store');
+    Route::post('/label/create', [PackageController::class, 'store'])->name('administrator.labels.store');
     Route::delete('/label/{label}', [PackageController::class, 'destroy'])->name('administrator.labels.destroy');
     Route::get('/label/{label}', [PackageController::class, 'edit'])->name('administrator.labels.edit');
     Route::put('/label/{label}', [PackageController::class, 'update'])->name('administrator.labels.update');
     Route::post('/pdf', [PackageController::class, 'generatePDF'])->name('administrator.labels.PDF');
-    Route::post('/csv', [PackageController::class,'importCSV'])->name('administrator.labels.importCSV');
+    Route::post('/csv', [PackageController::class, 'importCSV'])->name('administrator.labels.importCSV');
 
     //pickups
     Route::get('/pickups', [PickupRequestController::class, 'show'])->name('administrator.pickups.show');
     Route::post('/pickups', [PickupRequestController::class, 'store'])->name('administrator.pickups.store');
     Route::get('/pickups/create', [PickupRequestController::class, 'create'])->name('administrator.pickups.create');
 
-    //reviews
-    Route::get('/reviews', [ReviewController::class,'show'])->name('administrator.reviews.show');
 });
+
+Route::middleware(['auth', 'role:packer'])->group(function () {
+    Route::get('/packages/read', [PackageController::class, 'read'])->name('packer.packages.read');;
+});
+
 
 Route::middleware(['auth', 'role:courier'])->group(function () {
     Route::get('/registered/packages', [CourierController::class, 'show'])->name('courier.packages.show');;
@@ -94,6 +101,20 @@ Route::middleware(['auth', 'role:receiver_customer'])->group(function () {
 
 //authentication
 Route::get('/generate-api-token', [ApiController::class, 'generateApiToken'])->name('generate-api-token')->middleware(['auth', 'role:administrator']);
-Route::get('/generate-api-token/courier', [ApiController::class, 'generateApiTokenCourier'])->name('generate-api-token-courier')->middleware(['auth', 'role:courier']);
+Route::get('/generate-api-token/courier', [ApiController::class, 'generateApiToken'])->name('generate-api-token-courier')->middleware(['auth', 'role:courier']);
 
-require __DIR__.'/auth.php';
+
+
+//languauge switcher
+Route::post('/language/switch', function (Illuminate\Http\Request $request) {
+    $locale = $request->input('locale');
+    app()->setLocale($locale);
+    session()->put('locale', $locale);
+    return redirect()->back();
+})->name('language.switch');
+
+
+
+Route::get('lang/change', [LangController::class, 'index'])->name('lang.index');
+
+require __DIR__ . '/auth.php';

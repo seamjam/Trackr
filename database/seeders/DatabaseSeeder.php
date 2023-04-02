@@ -22,8 +22,6 @@ class DatabaseSeeder extends Seeder
         //webshops
         Webshop::Create([
             'name' => 'Webshop 1',
-            'postcode' => '3459AA',
-            'house_number' => '1',
         ]);
 
         // superadmin user
@@ -143,7 +141,7 @@ class DatabaseSeeder extends Seeder
 
         $reviews = [
             ['stars' => 5,
-             'description' => 'hele fijne delivery, zal het zeker nog eens doen. via deze post bedrijf hihi']
+             'description' => 'hele fijne delivery, zal het zeker nog eens doen. via deze post bedrijf']
         ];
         DB::table('reviews')->insert($reviews);
 
@@ -154,6 +152,5 @@ class DatabaseSeeder extends Seeder
             ]
         ];
         DB::table('packages')->insert($packages);
-
     }
 }

@@ -47,7 +47,7 @@ class ApiController extends Controller
             $newLabel->save();
 
             if (!$newLabel->save()) {
-                return response()->json(['error' => 'An error occurred while saving the label'], 500);
+                return response()->json(['error' => 'An error occurred while registering the packages'], 500);
             }
         }
         return response()->json(['message' => 'The labels have been created successfully!'], 201);
@@ -77,13 +77,4 @@ class ApiController extends Controller
 
         return response()->json(['message' => 'Status updated successfully'], 201);
     }
-
-
-    public function generateApiTokenCourier()
-    {
-        auth()->user()->tokens()->delete();
-        $token = auth()->user()->createToken('api', ['exp' => Carbon::now()->addMonths(6)->timestamp])->plainTextToken;
-        return ['api_token' => $token];
-    }
-
 }

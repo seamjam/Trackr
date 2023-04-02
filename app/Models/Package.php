@@ -37,7 +37,7 @@ class Package extends Model
         return $this->belongsTo(Post_company::class);
     }
 
-    public function Review()
+    public function review()
     {
         return $this->belongsTo(Review::class);
     }

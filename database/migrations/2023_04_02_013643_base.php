@@ -14,17 +14,16 @@ return new class extends Migration
         //webshop aanmaken
         Schema::create('webshops', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->fulltext();
-            $table->string('postcode')->fulltext();
-            $table->string('house_number')->fulltext();
+            $table->string('name');
             $table->timestamps();
+            $table->index(['name'], 'webshops_name_fulltext');
         });
 
         //user table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->fulltext();
-            $table->string('email')->unique()->fulltext();
+            $table->string('name');
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phonenumber')->nullable();
@@ -35,6 +34,7 @@ return new class extends Migration
             $table->string('receiver_house_number')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->index(['name', 'email', 'phonenumber', 'webshop_id'], 'users_fulltext_index');
         });
 
         //roles
@@ -42,6 +42,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->timestamps();
+            $table->index(['name'], 'roles_name_fulltext');
         });
 
         //userroles
@@ -57,22 +58,25 @@ return new class extends Migration
         //package status
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->fulltext();;
+            $table->string('name');
             $table->timestamps();
+            $table->index(['name'], 'statuses_name_fulltext');
         });
 
         Schema::create('post_companies', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->fulltext();;
+            $table->string('name');
             $table->timestamps();
+            $table->index(['name'], 'post_companies_name_fulltext');
         });
 
         //Reviews
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->integer('stars')->nullable();
-            $table->text('description')->fulltext();;
+            $table->text('description');
             $table->timestamps();
+            $table->index(['description'], 'reviews_description_fulltext');
         });
 
         //pickuprequests
@@ -83,27 +87,29 @@ return new class extends Migration
             $table->string('postal_code');
             $table->string('house_number');
             $table->timestamps();
-        });
+            $table->index(['date', 'postal_code', 'house_number'], 'pickuprequest_fulltext');
+       });
 
         //package
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('statuses');
-            $table->string('tracking_number')->unique()->fulltext();
+            $table->string('tracking_number')->unique();
             $table->unsignedBigInteger('webshop_id')->nullable();
-            $table->foreign('webshop_id')->references('id')->on('webshops')->nullabele();
+            $table->foreign('webshop_id')->references('id')->on('webshops')->nullable();
             $table->unsignedBigInteger('post_company_id')->nullable();
-            $table->foreign('post_company_id')->references('id')->on('post_companies')->nullabele();
+            $table->foreign('post_company_id')->references('id')->on('post_companies')->nullable();
             $table->unsignedBigInteger('review_id')->nullable();
-            $table->foreign('review_id')->references('id')->on('reviews')->nullablele();
-            $table->unsignedBigInteger('pickupRequest_id')->nullable();
-            $table->foreign('pickupRequest_id')->references('id')->on('pickup_requests')->nullablele();
-            $table->string('receiver_firstname')->nullable()->fulltext();;
-            $table->string('receiver_lastname')->nullable()->fulltext();;
-            $table->string('receiver_postal_code')->nullable()->fulltext();;
-            $table->string('receiver_house_number')->nullable()->fulltext();;
+            $table->foreign('review_id')->references('id')->on('reviews')->nullable();
+            $table->unsignedBigInteger('pickup_request_id')->nullable();
+            $table->foreign('pickup_request_id')->references('id')->on('pickup_requests')->nullable();
+            $table->string('receiver_firstname')->nullable();
+            $table->string('receiver_lastname')->nullable();
+            $table->string('receiver_postal_code')->nullable();
+            $table->string('receiver_house_number')->nullable();
             $table->timestamps();
+            $table->index(['tracking_number', 'receiver_firstname', 'receiver_lastname'], 'packages_fulltext_index');
         });
 
         //reset password token table
@@ -130,4 +136,3 @@ return new class extends Migration
         Schema::dropIfExists('pickup_requests');
     }
 };
-

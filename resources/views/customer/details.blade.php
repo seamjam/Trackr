@@ -7,9 +7,9 @@
 
         <div class="bg-white p-4 rounded-lg mx-auto mt-12 lg:max-w-7xl">
 
-            <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">Order details</h1>
+            <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">{{__('titles.order_details')}}</h1>
             <h2 class="text-center text-gray-900 text-3xl  mb-5">{{$package->post_company->name}}</h2>
-            <h2 class="text-center text-gray-900 text-3x mb-5">Tracking number: <i>{{$package->tracking_number}}</i></h2>
+            <h2 class="text-center text-gray-900 text-3x mb-5">{{__('titles.tracking_number')}}:: <i>{{$package->tracking_number}}</i></h2>
 
             <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">{{$package->status->name}}</h1>
 

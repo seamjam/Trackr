@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="bg-white p-4 rounded-lg" style="max-width: 950px; margin: 50px auto 0;">
-        <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">Edit {{$user->name}}</h1>
+        <h1 class="text-center text-gray-900 text-3xl font-bold mb-5">{{__('titles.edit')}}: {{$user->name}}</h1>
 
         <form method="POST" action="{{ route('webshop.user.update', $user->id) }}">
             @csrf
@@ -9,7 +9,7 @@
             <x-form-input name="email" type="email" :value="$user->email"/>
             <x-form-input name="phonenumber" type="tel" :value="$user->phonenumber"/>
 
-            <label for="roles" class="block text-gray-700 font-bold mb-2">Rol(s)</label>
+            <label for="roles" class="block text-gray-700 font-bold mb-2">{{__('titles.rol')}}:</label>
             <div style="height: 100px; overflow-y: scroll;">
                 @foreach($roles as $role)
                     <div>
@@ -23,17 +23,17 @@
 
             <div class="mt-5">
                 <button type="submit" class="bg-black text-white font-bold py-2 px-4 rounded-lg">
-                    Update User
+                    {{__('titles.update')}} user
                 </button>
 
-                <button type="button" onclick="window.location.href='{{ route('webshop.user.show.blade.php') }}'"
+                <button type="button" onclick="window.location.href='{{ route('webshop.user.show') }}'"
                         class="bg-white border border-black text-black font-bold py-2 px-5 rounded-lg">
-                    Return
+                    {{__('titles.return')}}
                 </button>
 
                 <button type="button" id="show-delete-btn"
                         class="bg-white border border-black text-black font-bold py-2 px-5 rounded-lg ml-5">
-                    Delete
+                    {{__('titles.delete')}}
                 </button>
             </div>
         </form>
@@ -43,13 +43,13 @@
             @csrf
             @method('DELETE')
             <button type="submit" class="bg-red-500 text-white font-bold py-2 px-5 rounded-lg mt-5">
-                Confirm Delete
+                {{__('titles.confirm_delete')}}:
             </button>
         </form>
     </div>
 
     <script>
-        document.getElementById('show.blade.php-delete-btn').addEventListener('click', function () {
+        document.getElementById('show-delete-btn').addEventListener('click', function () {
             document.getElementById('delete-form').style.display = 'block';
         });
     </script>

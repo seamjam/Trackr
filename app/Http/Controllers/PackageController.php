@@ -162,4 +162,54 @@ class PackageController extends Controller
         }
         return redirect()->route('administrator.labels.show')->with('success', 'Packages have been imported successfully!');
     }
+
+    public function read(Request $request){
+        $webshopId = auth()->user()->webshop_id;
+        $statuses = Status::all();
+
+        $selectedStatus = $request->input('status', '');
+        $isSent = $request->input('is_sent', '');
+        $search = $request->input('search', '');
+        $sort = $request->input('sort', 'tracking_number');
+        $order = $request->input('order', 'asc');
+
+        $packages = Package::where('webshop_id', $webshopId);
+
+        if ($selectedStatus) {
+            $packages = $packages->where('status_id', $selectedStatus);
+        }
+
+        if ($isSent !== '') {
+            $packages = $isSent == '1' ? $packages->whereNotNull('pickupRequest_id') : $packages->whereNull('pickupRequest_id');
+        }
+
+        if ($search) {
+            $packages = $packages->where(function ($query) use ($search) {
+                $query->whereRaw("MATCH (tracking_number, receiver_firstname, receiver_lastname, receiver_postal_code, receiver_house_number) AGAINST (? IN BOOLEAN MODE)", $search)
+                    ->orWhereHas('post_company', function ($query) use ($search) {
+                        $query->whereRaw("MATCH (name) AGAINST (? IN BOOLEAN MODE)", $search);
+                    });
+            });
+        }
+
+        if ($sort === 'post_company_name') {
+            $packages = $packages->leftJoin('post_companies', 'packages.post_company_id', '=', 'post_companies.id')
+                ->orderBy('post_companies.name', $order)
+                ->select('packages.*');
+        } else {
+            $packages = $packages->orderBy($sort, $order);
+        }
+
+        $packages = $packages->paginate(10);
+
+        return view('packer.packages.show', [
+            'packages' => $packages,
+            'statuses' => $statuses,
+            'selectedStatus' => $selectedStatus,
+            'isSent' => $isSent,
+            'sort' => $sort,
+            'order' => $order,
+        ]);
+    }
+
 }
