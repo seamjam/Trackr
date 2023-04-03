@@ -17,7 +17,7 @@ class PackageControllerTest extends TestCase
 
     public function testGeneratePDFFunction()
     {
-        // Create 3 Package instances
+        // Faking 3 packages
         $packages = Package::factory()->count(3)->create();
 
         // Set up request data
@@ -26,7 +26,7 @@ class PackageControllerTest extends TestCase
         ];
 
         // Send a POST request to the generatePDF route
-        $response = $this->post(route('administrator.labels.generatePDF'), $requestData);
+        $response = $this->post(route('administrator.labels.PDF'), $requestData);
 
         // Assert the response is a PDF download
         $response->assertHeader('content-disposition', 'attachment; filename=labels.pdf');

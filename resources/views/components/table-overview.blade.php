@@ -5,16 +5,16 @@
         <thead>
         <tr>
             <th class="w-1/6 text-left">
-                <a href="{{ route('webshop.user.show', array_merge(request()->query(), ['sort' => 'name', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">{{__('titles.name')}}:</a>
+                <a href="{{ route('webshop.user.show', array_merge(request()->query(), ['sort' => 'name', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">{{__('titles.name')}}</a>
             </th>
             <th class="w-1/6 text-left">
-                <a href="{{ route('webshop.user.show', array_merge(request()->query(), ['sort' => 'email', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">{{__('titles.email')}}:</a>
+                <a href="{{ route('webshop.user.show', array_merge(request()->query(), ['sort' => 'email', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">{{__('titles.email')}}</a>
             </th>
             <th class="w-1/6 text-left">
-                <a href="{{ route('webshop.user.show', array_merge(request()->query(), ['sort' => 'phonenumber', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">{{__('titles.phonenumber')}}:
+                <a href="{{ route('webshop.user.show', array_merge(request()->query(), ['sort' => 'phonenumber', 'direction' => $direction === 'asc' ? 'desc' : 'asc'])) }}">{{__('titles.phonenumber')}}
                     </a>
             </th>
-            <th class="w-1/6 text-left">{{__('titles.rolsr')}}:</th>
+            <th class="w-1/6 text-left">{{__('titles.rol')}}:</th>
 
             @if($edit)
                 <th class="w-1/6 text-left"></th>
@@ -34,7 +34,7 @@
                         <form action="{{ route('webshop.user.edit', $object->id) }}" method="GET">
                             <button type="submit"
                                     class="border-gray-400 bg-black text-white font-bold py-2 px-4 rounded-lg">
-                                {{__('titles.edit')}}:
+                                {{__('titles.edit')}}
                             </button>
                         </form>
                     </td>

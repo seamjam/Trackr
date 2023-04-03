@@ -56,11 +56,5 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Webshop::class);
     }
-
-    public function isAdmin()
-    {
-        return $this->is_admin && $this->webshop !== null;
-    }
-
 }
 

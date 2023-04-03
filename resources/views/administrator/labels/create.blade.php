@@ -2,7 +2,7 @@
     <script src="{{ asset('/js/label.create.js') }}" defer></script>
 
     <div class="bg-white p-4 rounded-lg" style="max-width: 1100px; margin: 50px auto 0;">
-        <h1 class="text-center text-gray-900 text-3xl font-bold mb-5"> {{__('titles.register_package')}})</h1>
+        <h1 class="text-center text-gray-900 text-3xl font-bold mb-5"> {{__('titles.register_package')}}</h1>
 
         <form id="myForm" method="POST" action="{{ route('administrator.labels.store') }}">
             @csrf

@@ -13,7 +13,7 @@
                 </a>
             </div>
 
-            <x-search-bar :route="route('superadmin.user.show')" :placeholder="__('titles.search_user')"/>
+            <x-search-bar :route="route('superadmin.user.show')" :placeholder="'search'"/>
 
         </div>
 

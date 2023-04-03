@@ -10,10 +10,9 @@ use Tests\DuskTestCase;
 class RolsTest extends DuskTestCase
 {
 
-
-//    /**
-//     * @test
-//     */
+    /**
+     * @test
+     */
     public function superadmin_create_deliverycompany_and_user_createwebshop(): void
     {
         $this->browse(function (Browser $browser) {
@@ -59,9 +58,9 @@ class RolsTest extends DuskTestCase
         });
     }
 
-    /**
-     * @test
-     */
+//    /**
+//     * @test
+//     */
     public function administrator_create(): void
     {
         $this->browse(function (Browser $browser) {
@@ -103,7 +102,7 @@ class RolsTest extends DuskTestCase
                 ->logout();
         });
     }
-
+//
 //    /**
 //     * @test
 //     */

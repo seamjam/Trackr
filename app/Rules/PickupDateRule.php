@@ -19,6 +19,6 @@ class PickupDateRule implements Rule
 
     public function message()
     {
-        return 'The pickup date must be scheduled at least 1 day in advance before 15:00.';
+        return 'The pickup date must be scheduled at least 2 day in advance before 15:00.';
     }
 }

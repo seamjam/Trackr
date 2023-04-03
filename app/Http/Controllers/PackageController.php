@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use League\Csv\Reader;
 use Picqer\Barcode\BarcodeGeneratorHTML;
+use Symfony\Component\HttpKernel\Kernel;
 
 
 class PackageController extends Controller
@@ -145,8 +146,6 @@ class PackageController extends Controller
 
             if ($post_company) {
                 $post_company_id = $post_company->id;
-            } else {
-                return redirect()->route('administrator.labels.show')->with('error', 'Registered packages where formated incorrectly.');
             }
 
             $package = new Package;

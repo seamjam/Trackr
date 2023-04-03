@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
     {
         //webshops
         Webshop::Create([
-            'name' => 'Webshop 1',
+            'name' => 'Zara',
         ]);
 
         // superadmin user
@@ -34,8 +34,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $webshop_owner = User::create([
-            'name' => 'webshopowner1',
-            'email' => 'webshop1@trackr.com',
+            'name' => 'Zahra',
+            'email' => 'zara@trackr.com',
             'password' => Hash::make('password'),
             'phonenumber' => '067774567869',
             'is_admin' => true,
@@ -43,8 +43,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $administrator1 = User::create([
-            'name' => 'administrator1',
-            'email' => 'administrator1@trackr.com',
+            'name' => 'administrator',
+            'email' => 'administrator@trackr.com',
             'password' => Hash::make('password'),
             'phonenumber' => '067774567869',
             'is_admin' => false,

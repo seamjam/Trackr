@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\PickupRequest;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Package;
 
 class PickupRequestFactory extends Factory
 {
@@ -14,7 +15,6 @@ class PickupRequestFactory extends Factory
         return [
             'package_id' => Package::factory(),
             'pickup_date' => $this->faker->dateTimeBetween('+1 week', '+2 weeks'),
-            'status' => $this->faker->randomElement(['requested', 'confirmed', 'picked_up', 'canceled']),
         ];
     }
 }

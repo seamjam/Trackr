@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Package;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Webshop;
 
 class PackageFactory extends Factory
 {
@@ -12,8 +13,7 @@ class PackageFactory extends Factory
     public function definition()
     {
         return [
-            'description' => $this->faker->sentence,
-            'weight' => $this->faker->randomFloat(2, 0.1, 20),
+            'tracking_number' => $this->faker->word(),
             'webshop_id' => Webshop::factory(),
         ];
     }

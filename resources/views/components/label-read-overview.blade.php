@@ -33,10 +33,6 @@
                 <a href="{{ request()->fullUrlWithQuery(['sort' => 'receiver_house_number', 'order' => $newOrder]) }}">House
                     number</a>
             </th>
-            <th class="w-1/8 text-left">
-                <a href="{{ request()->fullUrlWithQuery(['sort' => 'pickupRequest_id', 'order' => $newOrder]) }}">
-                    Pickup date</a>
-            </th>
         </tr>
         </thead>
         <tbody class="h-40 overflow-y-scroll">
@@ -53,11 +49,6 @@
                 <td class="py-1 border-b">{{ $object->receiver_lastname }}</td>
                 <td class="py-1 border-b">{{ $object->receiver_postal_code }}</td>
                 <td class="py-1 border-b">{{ $object->receiver_house_number }}</td>
-                @if($object->pickup_date!= null)
-                    <td class="py-1 border-b">{{ $object->pickupRequest->date }}</td>
-                @else
-                    <td class="py-1 border-b">N/A</td>
-                @endif
             </tr>
         @endforeach
         </tbody>

@@ -50,7 +50,7 @@
     <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto modal">
         <div class="modal-content py-4 text-left px-6">
             <div class="modal-header flex justify-between items-center pb-3">
-                <h5 class="text-2xl font-bold" id="user-modal-label">{{__('titles.webshop_information')}}</h5>
+                <h5 class="text-2xl font-bold" id="user-modal-label">Webshop information</h5>
                 <button type="button" class="close-modal cursor-pointer z-50" data-bs-dismiss="modal"
                         aria-label="Close">
                     <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
@@ -66,7 +66,7 @@
                 <p>Owner name: <span id="user-name"></span></p>
                 <p>Email: <span id="user-email"></span></p>
                 <p>Phone number: <span id="user-phone"></span></p>
-                <p>Webshop address: <span id="user-webshop-address"></span></p>
+                <p> <span id="user-webshop-address"></span></p>
             </div>
         </div>
     </div>

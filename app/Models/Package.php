@@ -23,9 +23,10 @@ class Package extends Model
         'receiver_house_number'
     ];
 
-    public function pickupRequest(){
-        return $this->belongsTo(PickupRequest::class);
+    public function pickupRequests(){
+        return $this->hasMany(PickupRequest::class);
     }
+
 
     public function status()
     {

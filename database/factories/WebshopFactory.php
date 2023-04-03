@@ -13,7 +13,6 @@ class WebshopFactory extends Factory
     {
         return [
             'name' => $this->faker->company,
-            'url' => $this->faker->url,
         ];
     }
 }

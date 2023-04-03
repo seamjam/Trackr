@@ -19,11 +19,11 @@ class WebshopControllerTest extends TestCase
      */
     public function test_store_method_creates_webshop_and_admin_user()
     {
-        // Create role with id 1 for superadmin and id 2 for webshop admin
+//creating 2 rols, one for superadmin and one for webshop with the id 2
         Role::factory()->create(['id' => 1]);
         Role::factory()->create(['id' => 2]);
 
-        // Create a request object
+        // Create a request object to create a fake post request
         $request = Request::create('/dummy-route', 'POST', [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
@@ -31,14 +31,13 @@ class WebshopControllerTest extends TestCase
             'webshop_name' => $this->faker->company,
         ]);
 
-        // Call the store method
         $response = $this->actingAs($this->createSuperAdmin())->post('/dummy-route', $request->all());
 
         // Assert that a new webshop and user have been created
         $this->assertDatabaseCount('webshops', 1);
-        $this->assertDatabaseCount('users', 2); // Including superadmin created for actingAs
+        $this->assertDatabaseCount('users', 2);
 
-        // Check if the created user is an admin user and has the correct webshop_id
+        // Check with the emaiol it the user has been created
         $user = User::where('email', $request->input('email'))->first();
         $this->assertTrue($user->is_admin);
         $this->assertEquals($user->webshop_id, Webshop::first()->id);
@@ -64,12 +63,11 @@ class WebshopControllerTest extends TestCase
     private function createSuperAdmin()
     {
         $superadmin = User::factory()->create([
-            'is_admin' => true,
+            'is_admin' => false,
         ]);
 
         // Attach role with id 1 to the superadmin
         $superadmin->roles()->attach(Role::find(1));
-
         return $superadmin;
     }
 }

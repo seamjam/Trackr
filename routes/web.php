@@ -65,7 +65,6 @@ Route::middleware(['auth', 'role:webshop'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:administrator'])->group(function () {
-
     //packaging
     Route::get('/labels', [PackageController::class, 'show'])->name('administrator.labels.show');
     Route::get('/label/create', [PackageController::class, 'create'])->name('administrator.labels.create');
